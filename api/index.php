@@ -38,6 +38,9 @@ $app->delete('/user/:id', 'deleteUser');
 
 $app->run();
 
+/* CIHAZLAR
+ * *****************************************************************************
+ */
 function getDevices() {
     $sql = "SELECT * FROM device ORDER BY deviceName";
     try {
@@ -161,16 +164,16 @@ function getGames() {
 
 }
 
-function getGame($uniqueId) {
-    $sql = "SELECT * FROM device WHERE uniqueId=:uniqueId";
+function getGame($gameId) {
+    $sql = "SELECT * FROM games WHERE gameId=:gameId";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("gameId", $gameId);
         $stmt->execute();
-        $device = $stmt->fetchObject();
+        $game = $stmt->fetchObject();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($game);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -178,58 +181,45 @@ function getGame($uniqueId) {
 
 
 function addGame() {
-    //error_log('addDevice\n', 3, '/var/tmp/php.log');
     $request = Slim::getInstance()->request();
-    $device = json_decode($request->getBody());
-    $sql = "INSERT INTO device (uniqueId, deviceName, override,"
-            . " timeStart, timeEnd, notes) VALUES (:uniqueId, :deviceName, :override, :timeStart, :timeEnd, :notes);";
+    $game = json_decode($request->getBody());
+    $sql = "INSERT INTO games (gameName) VALUES (:gameName);";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $device->uniqueId);
-        $stmt->bindParam("deviceName", $device->deviceName);
-        $stmt->bindParam("override", $device->override);
-        $stmt->bindParam("timeStart", $device->timeStart);
-        $stmt->bindParam("timeEnd", $device->timeEnd);
-        $stmt->bindParam("notes", $device->notes);
+        $stmt->bindParam("gameName", $game->gameName);
         $stmt->execute();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($game);
     } catch (PDOException $exc) {
-        //error_log($exc->getMessage(), 3, '/var/tmp/php.log');
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
 
-function updateGame($uniqueId) {
+function updateGame($gameId) {
     $request = Slim::getInstance()->request();
     $body = $request->getBody();
-    $device = json_decode($body);
-    $sql = "UPDATE device SET deviceName=:deviceName, override=:override, timeStart=:timeStart,"
-            . " timeEnd=:timeEnd, notes=:notes WHERE uniqueId=:uniqueId";
+    $game = json_decode($body);
+    $sql = "UPDATE games SET gameName=:gameName WHERE gameId=:gameId";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("deviceName", $device->deviceName);
-        $stmt->bindParam("override", $device->override);
-        $stmt->bindParam("timeStart", $device->timeStart);
-        $stmt->bindParam("timeEnd", $device->timeEnd);
-        $stmt->bindParam("notes", $device->notes);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("gameName", $game->gameName);
+        $stmt->bindParam("gameId", $gameId);
         $stmt->execute();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($game);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
 
 function deleteGame($gameId) {
-    $sql = "DELETE FROM device WHERE uniqueId=:uniqueId";
+    $sql = "DELETE FROM games WHERE gameId=:gameId";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("gameId", $gameId);
         $stmt->execute();
         $db = null;
     } catch (PDOException $exc) {
@@ -245,9 +235,9 @@ function findGameByName($query) {
         $query = "%" . $query . "%";
         $stmt->bindParam("query", $query);
         $stmt->execute();
-        $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $games = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = null;
-        echo '{"game": ' . json_encode($devices) . '}';
+        echo '{"game": ' . json_encode($games) . '}';
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }

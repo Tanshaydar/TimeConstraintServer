@@ -357,29 +357,29 @@ function findScoreByName($query) {
  * *****************************************************************************
  */
 function getUsers() {
-    $sql = "SELECT * FROM device ORDER BY deviceName";
+    $sql = "SELECT * FROM user ORDER BY userName";
     try {
         $db = getConnection();
         $stmt = $db->query($sql);
-        $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $users = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = NULL;
-        echo '{"user": ' . json_encode($devices) . '}';
+        echo '{"user": ' . json_encode($users) . '}';
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 
 }
 
-function getUser($uniqueId) {
-    $sql = "SELECT * FROM device WHERE uniqueId=:uniqueId";
+function getUser($userId) {
+    $sql = "SELECT * FROM user WHERE userId=:userId";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("userId", $userId);
         $stmt->execute();
-        $device = $stmt->fetchObject();
+        $user = $stmt->fetchObject();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($user);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -389,56 +389,49 @@ function getUser($uniqueId) {
 function addUser() {
     //error_log('addDevice\n', 3, '/var/tmp/php.log');
     $request = Slim::getInstance()->request();
-    $device = json_decode($request->getBody());
-    $sql = "INSERT INTO device (uniqueId, deviceName, override,"
-            . " timeStart, timeEnd, notes) VALUES (:uniqueId, :deviceName, :override, :timeStart, :timeEnd, :notes);";
+    $user = json_decode($request->getBody());
+    $sql = "INSERT INTO user (userName, userPassword, userAccess) VALUES (:userName, :userPassword, :userAccess);";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $device->uniqueId);
-        $stmt->bindParam("deviceName", $device->deviceName);
-        $stmt->bindParam("override", $device->override);
-        $stmt->bindParam("timeStart", $device->timeStart);
-        $stmt->bindParam("timeEnd", $device->timeEnd);
-        $stmt->bindParam("notes", $device->notes);
+        $stmt->bindParam("userName", $user->userName);
+        $stmt->bindParam("userPassword", $user->userPassword);
+        $stmt->bindParam("userAccess", $user->userAccess);
         $stmt->execute();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($user);
     } catch (PDOException $exc) {
         //error_log($exc->getMessage(), 3, '/var/tmp/php.log');
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
 
-function updateUser($uniqueId) {
+function updateUser($userId) {
     $request = Slim::getInstance()->request();
     $body = $request->getBody();
-    $device = json_decode($body);
-    $sql = "UPDATE device SET deviceName=:deviceName, override=:override, timeStart=:timeStart,"
-            . " timeEnd=:timeEnd, notes=:notes WHERE uniqueId=:uniqueId";
+    $user = json_decode($body);
+    $sql = "UPDATE user SET userName=:userName, userPassword=:userPassword, userAccess=:userAccess WHERE userId=:userId";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("deviceName", $device->deviceName);
-        $stmt->bindParam("override", $device->override);
-        $stmt->bindParam("timeStart", $device->timeStart);
-        $stmt->bindParam("timeEnd", $device->timeEnd);
-        $stmt->bindParam("notes", $device->notes);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("userName", $user->userName);
+        $stmt->bindParam("userPassword", $user->userPassword);
+        $stmt->bindParam("userAccess", $user->userAccess);
+        $stmt->bindParam("userId", $userId);
         $stmt->execute();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($user);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
 
-function deleteUser($uniqueId) {
-    $sql = "DELETE FROM device WHERE uniqueId=:uniqueId";
+function deleteUser($userId) {
+    $sql = "DELETE FROM user WHERE userId=:userId";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("userId", $userId);
         $stmt->execute();
         $db = null;
     } catch (PDOException $exc) {
@@ -447,16 +440,16 @@ function deleteUser($uniqueId) {
 }
 
 function findUserByName($query) {
-    $sql = "SELECT * FROM device WHERE UPPER(deviceName) LIKE :query ORDER BY deviceName";
+    $sql = "SELECT * FROM user WHERE UPPER(userName) LIKE :query ORDER BY userName";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
         $query = "%" . $query . "%";
         $stmt->bindParam("query", $query);
         $stmt->execute();
-        $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $users = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = null;
-        echo '{"user": ' . json_encode($devices) . '}';
+        echo '{"user": ' . json_encode($users) . '}';
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }

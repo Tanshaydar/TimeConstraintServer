@@ -34,7 +34,7 @@ $app->get('/user/arama/:query', 'findUserByName');
 $app->post('/user', 'addUser');
 $app->put('/user/:id', 'updateUser');
 $app->delete('/user/:id', 'deleteUser');
-
+$app->post('/login', 'login');
 
 $app->run();
 
@@ -49,7 +49,7 @@ function getDevices() {
         $stmt = $db->query($sql);
         $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = NULL;
-        echo '{"device": ' . json_encode($devices) . '}';
+        echo json_encode($devices);
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -140,7 +140,7 @@ function findDeviceByName($query) {
         $stmt->execute();
         $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = null;
-        echo '{"device": ' . json_encode($devices) . '}';
+        echo json_encode($devices);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -157,7 +157,7 @@ function getGames() {
         $stmt = $db->query($sql);
         $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = NULL;
-        echo '{"game": ' . json_encode($devices) . '}';
+        echo json_encode($devices);
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -235,7 +235,7 @@ function findGameByName($query) {
         $stmt->execute();
         $games = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = null;
-        echo '{"game": ' . json_encode($games) . '}';
+        echo json_encode($games);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -252,7 +252,7 @@ function getScores() {
         $stmt = $db->query($sql);
         $scores = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = NULL;
-        echo '{"score": ' . json_encode($scores) . '}';
+        echo json_encode($scores);
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -338,7 +338,7 @@ function findScoreByName($query) {
         $stmt->execute();
         $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = null;
-        echo '{"score": ' . json_encode($devices) . '}';
+        echo json_encode($devices);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -356,7 +356,7 @@ function getUsers() {
         $stmt = $db->query($sql);
         $users = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = NULL;
-        echo '{"user": ' . json_encode($users) . '}';
+        echo json_encode($users);
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -440,7 +440,25 @@ function findUserByName($query) {
         $stmt->execute();
         $users = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = null;
-        echo '{"user": ' . json_encode($users) . '}';
+        echo json_encode($users);
+    } catch (PDOException $exc) {
+        echo '{"error":{"text":' . $exc->getMessage() . '}}';
+    }
+}
+
+function login(){
+    $request = Slim::getInstance()->request();
+    $login = json_decode($request->getBody());
+    $sql = "SELECT * FROM user WHERE userName=:userName AND userPassword=:userPassword";
+    try {
+        $db = getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam("userName", $login->userName);
+        $stmt->bindParam("userPassword", $login->userPassword);
+        $stmt->execute();
+        $login = $stmt->fetchObject();;
+        $db = null;
+        echo json_encode($login);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
@@ -455,7 +473,7 @@ function getConnection() {
     $dbhost = "localhost";
     $dbuser = "root";
     $dbpass = "";
-    $dbname = "cellar";
+    $dbname = "timeconstraint";
     $dbh = new PDO("mysql:host=$dbhost;dbname=$dbname;charset=utf8", $dbuser, $dbpass);
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $dbh;

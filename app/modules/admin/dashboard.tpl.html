@@ -1,0 +1,129 @@
+<!-- ADMIN SCREEN -->
+<div class="t2-header-light">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-xs-4 clearfix">
+                <p class="text-left">
+                    <button click-link="/dashboard" class="t2-btn-dark t2-btn-md" id="close-button-3">Back</button>
+                </p>
+            </div>
+            <div class="col-xs-4 clearfix">
+                <h1 class="t2-header-title" ng-if="!isAuthorized([userRoles.superadmin])">Admin Panel</h1>
+                <h1 class="t2-header-title" ng-if="isAuthorized([userRoles.superadmin])">Super Admin Panel</h1>
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+    </div>
+</div>
+
+<div class="t2-body" style="overflow: auto; overflow-x: hidden" snc-resize padding-bottom="60">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <p>
+                    <div class="btn-group btn-group-justified">
+                        <a type="button" class="btn btn-default" ng-click="createNewProvider()" id="new-provider-button"><i class="fa fa-user"></i> New Provider</a>
+                        <a type="button" class="btn btn-default" ng-disabled="!isAuthorized([userRoles.superadmin])" ng-click="createNewProviders()" id="new-providers-button"><i class="fa fa-users"></i> New Providers</a>
+                        <a type="button" class="btn btn-default" ng-disabled="!isAuthorized([userRoles.superadmin])" ng-click="openDomain()" id="domain-button"><i class="fa fa-plus-square"></i> Network</a>
+                        <a type="button" class="btn btn-default" ng-click="openReports()" id="reports-button"><i class="fa fa-line-chart"></i> Reports</a>
+                    </div>
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <p>
+                    <select class="form-control" ng-show="isAuthorized([userRoles.superadmin])" id="adSearchDomain" ng-model="searchDomain">
+                        <option value="0">Filter by Network</option>
+                        <option ng-repeat="domain in domains" value="{{domain.id}}">{{domain.name}}</option>
+                    </select>
+                </p>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <p>
+                    <select class="form-control" id="adSearchFacility" ng-model="searchFacility">
+                        <option value="0" selected="selected">Filter by Facility</option>
+                        <option ng-repeat="facility in facilities | facilityFilter:searchDomain" value="{{facility.id}}">{{facility.name}}</option>
+                    </select>
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <p>
+                    <select class="form-control" id="adSearchSpec" ng-model="searchSpec">
+                        <option value="0" selected="selected">Filter by Specialization</option>
+                        <option ng-repeat="spec in specializations" value="{{spec.id}}">{{spec.name}}</option>
+                    </select>
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <p>
+                    <input class="form-control" type="text" id="adSearchKeyword" ng-model="searchKeyword" placeholder="Filter by Name" />
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <p>
+                    <select class="form-control" id="adSearchRole" ng-model="searchRole">
+                        <option value="0" selected="selected">Filter by Role</option>
+                        <option ng-repeat="role in roles" value="{{role.id}}">{{role.authority}}</option>
+                    </select>
+                </p>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <p>
+                    <select class="form-control" id="adSearchProperty" ng-model="sortProperty">
+                        <option value="">Sort</option>
+                        <option value="familyName">Last Name A-Z</option>
+                        <option value="specializationName">Role A-Z</option>
+                        <option value="facility.name">Facility A-Z</option>
+                    </select>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="text-center">Personnel Directory</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="list-group">
+                    <a class="list-group-item" ng-class="{'disabled': !provider.user.enabled}" ng-repeat="provider in providers | orderBy:sortProperty | adminPanelFilter:searchFacility:searchSpec:searchRole:searchDomain:searchKeyword" ng-click="viewProvider(provider)">
+                        <div class="media">
+                            <div class="pull-left">
+                                <img class="media-object" ng-class="{'disabled': !provider.user.enabled}" ng-if="!provider.thumbnailUrl" ng-src="images/users/headshot.jpg" style="width: 100px">
+                                <img class="media-object" ng-class="{'disabled': !provider.user.enabled}" ng-if="provider.thumbnailUrl" ng-src="{{provider.thumbnailUrl}}" style="width: 100px">
+                            </div>
+                            <div class="media-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-5">
+                                            <h4><b>{{provider.title}} {{provider.givenName}} {{provider.middleName}} {{provider.familyName}} {{provider.suffix}}</b>
+                                            </h4>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <h4>{{provider.specialization.name}}</h4>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <h4>{{provider.facility.name}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <h6>Username: {{provider.user.username}}</h6>
+                                            <h6>E-mail: {{provider.user.email}}</h6>
+                                            <h6>Office phone: {{provider.phoneNumber}}</h6>
+                                            <h6>Mobile: {{provider.phoneNumber2}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,12 +4,11 @@
         <div class="row clearfix">
             <div class="col-xs-4 clearfix">
                 <p class="text-left">
-                    <button click-link="/dashboard" class="t2-btn-dark t2-btn-md" id="close-button-3">Back</button>
+                    <button ng-click="logout()" class="t2-btn-dark t2-btn-md" id="close-button-3">Çıkış</button>
                 </p>
             </div>
             <div class="col-xs-4 clearfix">
-                <h1 class="t2-header-title" ng-if="!isAuthorized([userRoles.superadmin])">Admin Panel</h1>
-                <h1 class="t2-header-title" ng-if="isAuthorized([userRoles.superadmin])">Super Admin Panel</h1>
+                <h1 class="t2-header-title">Android Zaman Kısıtlama Yönetim Paneli</h1>
             </div>
             <div class="col-xs-4"></div>
         </div>
@@ -30,31 +29,7 @@
                     </div>
                 </p>
             </div>
-            <div class="col-xs-12 col-sm-3">
-                <p>
-                    <select class="form-control" ng-show="isAuthorized([userRoles.superadmin])" id="adSearchDomain" ng-model="searchDomain">
-                        <option value="0">Filter by Network</option>
-                        <option ng-repeat="domain in domains" value="{{domain.id}}">{{domain.name}}</option>
-                    </select>
-                </p>
-            </div>
 
-            <div class="col-xs-12 col-sm-3">
-                <p>
-                    <select class="form-control" id="adSearchFacility" ng-model="searchFacility">
-                        <option value="0" selected="selected">Filter by Facility</option>
-                        <option ng-repeat="facility in facilities | facilityFilter:searchDomain" value="{{facility.id}}">{{facility.name}}</option>
-                    </select>
-                </p>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <p>
-                    <select class="form-control" id="adSearchSpec" ng-model="searchSpec">
-                        <option value="0" selected="selected">Filter by Specialization</option>
-                        <option ng-repeat="spec in specializations" value="{{spec.id}}">{{spec.name}}</option>
-                    </select>
-                </p>
-            </div>
             <div class="col-xs-12 col-sm-6">
                 <p>
                     <input class="form-control" type="text" id="adSearchKeyword" ng-model="searchKeyword" placeholder="Filter by Name" />
@@ -72,10 +47,9 @@
             <div class="col-xs-12 col-sm-3">
                 <p>
                     <select class="form-control" id="adSearchProperty" ng-model="sortProperty">
-                        <option value="">Sort</option>
+                        <option value="">Sırala</option>
                         <option value="familyName">Last Name A-Z</option>
                         <option value="specializationName">Role A-Z</option>
-                        <option value="facility.name">Facility A-Z</option>
                     </select>
                 </p>
             </div>
@@ -83,24 +57,24 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <h3 class="text-center">Personnel Directory</h3>
+                <h3 class="text-center">Cihaz Listesi</h3>
             </div>
         </div>
 
         <div class="row">
             <div class="col-xs-12">
                 <div class="list-group">
-                    <a class="list-group-item" ng-class="{'disabled': !provider.user.enabled}" ng-repeat="provider in providers | orderBy:sortProperty | adminPanelFilter:searchFacility:searchSpec:searchRole:searchDomain:searchKeyword" ng-click="viewProvider(provider)">
+                    <a class="list-group-item" ng-class="{'disabled': false}" ng-repeat="device in devices | orderBy:sortProperty " ng-click="viewProvider(provider)">
                         <div class="media">
                             <div class="pull-left">
-                                <img class="media-object" ng-class="{'disabled': !provider.user.enabled}" ng-if="!provider.thumbnailUrl" ng-src="images/users/headshot.jpg" style="width: 100px">
+                                <img class="media-object" ng-class="{'disabled': !provider.user.enabled}" ng-if="!provider.thumbnailUrl" ng-src="images/headshot.jpg" style="width: 100px">
                                 <img class="media-object" ng-class="{'disabled': !provider.user.enabled}" ng-if="provider.thumbnailUrl" ng-src="{{provider.thumbnailUrl}}" style="width: 100px">
                             </div>
                             <div class="media-body">
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-5">
-                                            <h4><b>{{provider.title}} {{provider.givenName}} {{provider.middleName}} {{provider.familyName}} {{provider.suffix}}</b>
+                                            <h4><b>{{device.uniqueId}} {{provider.givenName}} {{provider.middleName}} {{provider.familyName}} {{provider.suffix}}</b>
                                             </h4>
                                         </div>
                                         <div class="col-xs-12 col-sm-4">
@@ -112,10 +86,11 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <h6>Username: {{provider.user.username}}</h6>
-                                            <h6>E-mail: {{provider.user.email}}</h6>
-                                            <h6>Office phone: {{provider.phoneNumber}}</h6>
-                                            <h6>Mobile: {{provider.phoneNumber2}}</h6>
+                                            <h5>Aygıt Adı: {{device.deviceName}}</h5>
+                                            <h6>Genel Ayarları Kullan: {{device.override}}</h6>
+                                            <h6>Başlangıç Saati: {{device.timeStart}}</h6>
+                                            <h6>Bitiş Saati: {{device.timeEnd}}</h6>
+                                            <h6>Notlar: {{device.notes}}</h6>
                                         </div>
                                     </div>
                                 </div>

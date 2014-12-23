@@ -18,7 +18,7 @@ app.config(['$routeProvider', 'RestangularProvider', function ($routeProvider, R
         })
         .when('/dashboard', {
             controller: 'AdminController',
-            templateUrl: 'app/modules/authentication/login.tpl.html',
+            templateUrl: 'app/modules/admin/dashboard.tpl.html',
             hideMenus: true
         })
         .when('/', {

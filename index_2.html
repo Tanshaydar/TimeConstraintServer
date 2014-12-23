@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Android Cihaz Oyun Zamanı Takip Sistemi</title>
+        <link rel="stylesheet" href="css/styles.css" />
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <script src="js/angular.min.js"></script>
+        <script src="js/restangular.min.js"></script>
+        <script src="js/jquery-1.11.2.min.js"></script>
+        <script src="js/main.js"></script>
+        
+    </head>
+
+    <body>
+        <div ng-app="AndroidApp">
+        <div class="header">
+            <input type="text" id="searchKey"/>
+            <button id="btnSearch">Arama</button>
+            <button id="btnAdd">Yeni Cihaz</button>
+        </div>
+
+
+        <div class="col-md-4">
+            <ul id="deviceList"></ul>
+        </div>
+
+        <form id="deviceForm">
+
+            <div class="mainArea">
+
+                <label>Cihaz Eşsiz Id:</label>
+                <input id="uniqueId" name="uniqueId" type="text" disabled />
+
+                <label>Cihaz Adı:</label>
+                <input type="text" id="deviceName" name="deviceName" required>
+
+                <label>Genel Ayarları Kullan?</label>
+                <input type="radio" id="override" name="override" value="YES"/> Evet
+                <input type="radio" id="override" name="override" value="NO"/> Hayır
+
+                <label>Cihaz Başlama Saati:</label>
+                <input type="text" id="timeStart" name="timeStart"/>
+
+                <label>Cihaz Bitiş Saati:</label>
+                <input type="text" id="timeEnd" name="timeEnd"/>
+
+                <label>Notes:</label>
+                <textarea id="notes" name="notes"></textarea>
+                <br />
+                <button id="btnSave">Kaydet</button>
+                <button id="btnDelete">Sil</button>
+
+            </div>
+
+        </form>
+    </div>
+    </body>
+</html>

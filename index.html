@@ -1,59 +1,42 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-        <title>Android Cihaz Oyun Zamanı Takip Sistemi</title>
-        <link rel="stylesheet" href="css/styles.css" />
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <script src="js/angular.min.js"></script>
-        <script src="js/restangular.min.js"></script>
-        <script src="js/jquery-1.11.2.min.js"></script>
-        <script src="js/main.js"></script>
-        
-    </head>
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Android Zaman Kısıtlama</title>
 
-    <body>
-        <div ng-app="AndroidApp">
-        <div class="header">
-            <input type="text" id="searchKey"/>
-            <button id="btnSearch">Arama</button>
-            <button id="btnAdd">Yeni Cihaz</button>
-        </div>
+    <link rel="icon" href="images/favicon.png">
 
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-cookies.min.js"></script>
+    <script src="js/angular-resource.min.js"></script>
+    <script src="js/angular-sanitize.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/restangular.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/modules/authentication/services.js"></script>
+    <script src="app/modules/authentication/controllers.js"></script>
+    <script src="app/modules/home/controller.js"></script>
+    
+    <link rel="stylesheet" href="css/colorbox.css">
+    <link rel="stylesheet" href="css/loading-bar.min.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/project.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    
+    
+</head>
 
-        <div class="col-md-4">
-            <ul id="deviceList"></ul>
-        </div>
+<body ng-controller="ApplicationController">
 
-        <form id="deviceForm">
+<div class="t2-wrapper">
+    <div ng-view>test</div>
+</div>
 
-            <div class="mainArea">
-
-                <label>Cihaz Eşsiz Id:</label>
-                <input id="uniqueId" name="uniqueId" type="text" disabled />
-
-                <label>Cihaz Adı:</label>
-                <input type="text" id="deviceName" name="deviceName" required>
-
-                <label>Genel Ayarları Kullan?</label>
-                <input type="radio" id="override" name="override" value="YES"/> Evet
-                <input type="radio" id="override" name="override" value="NO"/> Hayır
-
-                <label>Cihaz Başlama Saati:</label>
-                <input type="text" id="timeStart" name="timeStart"/>
-
-                <label>Cihaz Bitiş Saati:</label>
-                <input type="text" id="timeEnd" name="timeEnd"/>
-
-                <label>Notes:</label>
-                <textarea id="notes" name="notes"></textarea>
-                <br />
-                <button id="btnSave">Kaydet</button>
-                <button id="btnDelete">Sil</button>
-
-            </div>
-
-        </form>
-    </div>
-    </body>
+<div ng-include src="'app/footer.tpl.html'"></div>
+</body>
 </html>

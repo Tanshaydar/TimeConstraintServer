@@ -25,7 +25,7 @@ $app->get('/score', 'getScores');
 $app->get('/score/:id', 'getScore');
 $app->post('/score', 'addScore');
 $app->put('/score/:id', 'updateScore');
-$app->delete('/score/:id', 'deleteScore');
+$app->delete('/score/:id/:game', 'deleteScore');
 
 // Kullanicilar
 $app->get('/user', 'getUsers');
@@ -41,6 +41,7 @@ $app->run();
 /* CIHAZLAR
  * *****************************************************************************
  */
+
 function getDevices() {
     $sql = "SELECT * FROM device ORDER BY deviceName";
     try {
@@ -52,7 +53,6 @@ function getDevices() {
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
-
 }
 
 function getDevice($uniqueId) {
@@ -69,7 +69,6 @@ function getDevice($uniqueId) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
-
 
 function addDevice() {
     //error_log('addDevice\n', 3, '/var/tmp/php.log');
@@ -150,6 +149,7 @@ function findDeviceByName($query) {
 /* OYUNLAR
  * *****************************************************************************
  */
+
 function getGames() {
     $sql = "SELECT * FROM games ORDER BY gameName";
     try {
@@ -161,7 +161,6 @@ function getGames() {
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
-
 }
 
 function getGame($gameId) {
@@ -178,7 +177,6 @@ function getGame($gameId) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
-
 
 function addGame() {
     $request = Slim::getInstance()->request();
@@ -242,29 +240,30 @@ function findGameByName($query) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
+
 /* SKORLAR
  * *****************************************************************************
  */
+
 function getScores() {
-    $sql = "SELECT * FROM device ORDER BY deviceName";
+    $sql = "SELECT * FROM scores ORDER BY device_unique_id";
     try {
         $db = getConnection();
         $stmt = $db->query($sql);
-        $devices = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $scores = $stmt->fetchAll(PDO::FETCH_OBJ);
         $db = NULL;
-        echo '{"score": ' . json_encode($devices) . '}';
+        echo '{"score": ' . json_encode($scores) . '}';
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
-
 }
 
-function getScore($uniqueId) {
-    $sql = "SELECT * FROM device WHERE uniqueId=:uniqueId";
+function getScore($device_unique_id) {
+    $sql = "SELECT * FROM scores WHERE device_unique_id=:device_unique_id";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("device_unique_id", $device_unique_id);
         $stmt->execute();
         $device = $stmt->fetchObject();
         $db = null;
@@ -274,60 +273,54 @@ function getScore($uniqueId) {
     }
 }
 
-
 function addScore() {
     //error_log('addDevice\n', 3, '/var/tmp/php.log');
     $request = Slim::getInstance()->request();
-    $device = json_decode($request->getBody());
-    $sql = "INSERT INTO device (uniqueId, deviceName, override,"
-            . " timeStart, timeEnd, notes) VALUES (:uniqueId, :deviceName, :override, :timeStart, :timeEnd, :notes);";
+    $score = json_decode($request->getBody());
+    $sql = "INSERT INTO scores (device_unique_id, game_id, score) "
+            . "VALUES (:device_unique_id, :game_id, :score);";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $device->uniqueId);
-        $stmt->bindParam("deviceName", $device->deviceName);
-        $stmt->bindParam("override", $device->override);
-        $stmt->bindParam("timeStart", $device->timeStart);
-        $stmt->bindParam("timeEnd", $device->timeEnd);
-        $stmt->bindParam("notes", $device->notes);
+        $stmt->bindParam("device_unique_id", $score->device_unique_id);
+        $stmt->bindParam("game_id", $score->game_id);
+        $stmt->bindParam("score", $score->score);
         $stmt->execute();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($score);
     } catch (PDOException $exc) {
         //error_log($exc->getMessage(), 3, '/var/tmp/php.log');
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
 
-function updateScore($uniqueId) {
+function updateScore($device_unique_id) {
     $request = Slim::getInstance()->request();
     $body = $request->getBody();
-    $device = json_decode($body);
-    $sql = "UPDATE device SET deviceName=:deviceName, override=:override, timeStart=:timeStart,"
-            . " timeEnd=:timeEnd, notes=:notes WHERE uniqueId=:uniqueId";
+    $score = json_decode($body);
+    $sql = "UPDATE scores SET score=:score "
+            . "WHERE device_unique_id=:device_unique_id AND game_id=:game_id";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("deviceName", $device->deviceName);
-        $stmt->bindParam("override", $device->override);
-        $stmt->bindParam("timeStart", $device->timeStart);
-        $stmt->bindParam("timeEnd", $device->timeEnd);
-        $stmt->bindParam("notes", $device->notes);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("device_unique_id", $score->device_unique_id);
+        $stmt->bindParam("game_id", $score->game_id);
+        $stmt->bindParam("score", $score->score);
         $stmt->execute();
         $db = null;
-        echo json_encode($device);
+        echo json_encode($score);
     } catch (PDOException $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
 
-function deleteScore($uniqueId) {
-    $sql = "DELETE FROM device WHERE uniqueId=:uniqueId";
+function deleteScore($device_unique_id, $game_id) {
+    $sql = "DELETE FROM scores WHERE device_unique_id=:device_unique_id AND game_id=:game_id";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam("uniqueId", $uniqueId);
+        $stmt->bindParam("device_unique_id", $score->device_unique_id);
+        $stmt->bindParam("game_id", $score->game_id);
         $stmt->execute();
         $db = null;
     } catch (PDOException $exc) {
@@ -351,11 +344,11 @@ function findScoreByName($query) {
     }
 }
 
-
 /*
  * KULLANICILAR
  * *****************************************************************************
  */
+
 function getUsers() {
     $sql = "SELECT * FROM user ORDER BY userName";
     try {
@@ -367,7 +360,6 @@ function getUsers() {
     } catch (Exception $exc) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
-
 }
 
 function getUser($userId) {
@@ -384,7 +376,6 @@ function getUser($userId) {
         echo '{"error":{"text":' . $exc->getMessage() . '}}';
     }
 }
-
 
 function addUser() {
     //error_log('addDevice\n', 3, '/var/tmp/php.log');
@@ -469,6 +460,7 @@ function getConnection() {
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $dbh;
 }
+
 /*
  * *****************************************************************************
  */

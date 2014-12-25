@@ -45,7 +45,7 @@ angular.module('adminModule')
             console.log(device);
             
             // First update user roles then provider itself
-            $scope.provider.put().then(function(data) {
+            $scope.device.put().then(function(data) {
                     console.log("Provider is successfully updated: " + data);
                     $scope.back2Admin();
                 }, function(data) {
@@ -55,6 +55,10 @@ angular.module('adminModule')
         
         $scope.deleteDevice = function (device){
             console.log("sil");
+            Restangular.one('device', $scope.device.uniqueId).remove().then( function(){
+                console.log("silme başarılı");
+               $scope.back2Admin(); 
+            });
         };
 
         // Return back to provider listing main page

@@ -1,0 +1,74 @@
+<!-- ADMIN SCREEN {PROVIDER DETAILS} -->
+<div class="t2-header-light">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-xs-4 clearfix">
+                <p class="text-left">
+                    <button ng-click="back2Admin()" class="t2-btn-dark t2-btn-md" id="close-button-3">Geri</button>
+                </p>
+            </div>
+            <div class="col-xs-4 clearfix">
+                <h1 class="t2-header-title">Cihaz Ayrıntıları</h1>
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+    </div>
+</div>
+
+<div class="t2-body" style="overflow-y: auto" snc-resize padding-bottom="60">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-md-9">
+                <form class="form-horizontal" role="form" name="deviceForm" novalidate>
+                    <div class="form-group" ng-disabled="true">
+                        <label class="col-sm-4 control-label">Cihaz Eşsiz ID:</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" name="uniqueId" id="uniqueId" ng-model="device.uniqueId" ng-disabled="true" required/>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error' : deviceForm.deviceName.$invalid }">
+                        <label class="col-sm-4 control-label">Cihaz Adı:</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" name="deviceName" id="deviceName" ng-model="device.deviceName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Genel Ayarları Kullan?</label>
+                        <div class="col-sm-8">
+                            <label><input type="radio" value="EVET" name="override" id="override" ng-model="device.override" required/> Evet </label>
+                            <label><input type="radio" value="HAYIR" name="override" id="override" ng-model="device.override" required/> Hayır </label>
+                            <p class="help-block">Eğer "Evet" seçeneği seçilirse cihaz için başlangıç ve bitiş saatlerini seçmelisiniz.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : deviceForm.timeStart.$invalid}">
+                        <label class="col-sm-4 control-label">Başlangıç Saati: </label>
+                        <div class="col-sm-8">
+                            <select class="form-control" ng-disabled="isCheckboxSelected()" ng-options="n for n in timeStart" ng-model="startHour"></select>
+                            <select class="form-control" ng-disabled="isCheckboxSelected()" ng-options="n for n in timeEnd" ng-model="startMinute"></select>
+                            <p ng-show="deviceForm.timeStart.$invalid" class="help-block">Bu alan gereklidir.</p>
+                        </div>
+                    </div>
+                        
+                    
+                    <div class="form-group" ng-class="{ 'has-error' : deviceForm.timeEnd.$invalid}">
+                        <label class="col-sm-4 control-label">Bitiş Saati</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" ng-disabled="isCheckboxSelected()" ng-options="n for n in timeStart" ng-model="endHour"></select>
+                            <select class="form-control" ng-disabled="isCheckboxSelected()" ng-options="n for n in timeEnd" ng-model="endMinute"></select>
+                            <p ng-show="deviceForm.timeEnd.$invalid" class="help-block">This field is required.</p>
+                        </div>
+                    </div>
+ 
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <button class="btn btn-primary" ng-disabled="!deviceForm.$valid" ng-click="saveProvider(device)" id="save-provider-button">Güncelle</button>
+                            <button class="btn btn-danger" ng-click="deleteDevice(device)" id="delete-device-button">Cihazı Sil</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

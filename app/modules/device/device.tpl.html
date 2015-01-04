@@ -33,8 +33,14 @@
                             <input class="form-control" type="text" name="deviceName" id="deviceName" ng-model="device.deviceName" />
                         </div>
                     </div>
+                    <div class="form-group" ng-class="{ 'has-error' : deviceForm.notes.$invalid }">
+                        <label class="col-sm-4 control-label">Notlar:</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" type="text" name="deviceName" id="deviceName" ng-model="device.notes" row="2"/>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">Genel Ayarları Kullan?</label>
+                        <label class="col-sm-4 control-label">Cihaz için Özel Ayarları Kullan?</label>
                         <div class="col-sm-8">
                             <label><input type="radio" value="EVET" name="override" id="override" ng-model="device.override" required/> Evet </label>
                             <label><input type="radio" value="HAYIR" name="override" id="override" ng-model="device.override" required/> Hayır </label>
@@ -50,21 +56,20 @@
                             <p ng-show="deviceForm.timeStart.$invalid" class="help-block">Bu alan gereklidir.</p>
                         </div>
                     </div>
-                        
-                    
+
                     <div class="form-group" ng-class="{ 'has-error' : deviceForm.timeEnd.$invalid}">
                         <label class="col-sm-4 control-label">Bitiş Saati</label>
                         <div class="col-sm-8">
                             <select class="form-control" ng-disabled="isCheckboxSelected()" ng-options="n for n in timeStart" ng-model="endHour"></select>
                             <select class="form-control" ng-disabled="isCheckboxSelected()" ng-options="n for n in timeEnd" ng-model="endMinute"></select>
-                            <p ng-show="deviceForm.timeEnd.$invalid" class="help-block">This field is required.</p>
+                            <p ng-show="deviceForm.timeEnd.$invalid" class="help-block">Bu alan gereklidir.</p>
                         </div>
                     </div>
- 
+
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-8">
-                            <button class="btn btn-primary" ng-disabled="!deviceForm.$valid" ng-click="saveProvider(device)" id="save-provider-button">Güncelle</button>
-                            <button class="btn btn-danger" ng-click="deleteDevice(device)" id="delete-device-button">Cihazı Sil</button>
+                            <button class="btn btn-primary" ng-disabled="!deviceForm.$valid" ng-click="saveDevice(device)" id="save-provider-button">Güncelle</button>
+                            <button class="btn btn-danger" ng-click="deleteDevice()" id="delete-device-button">Cihazı Sil</button>
                         </div>
                     </div>
                 </form>

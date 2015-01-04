@@ -4,6 +4,10 @@ require 'Slim/Slim.php';
 
 $app = new Slim();
 
+// Zaman
+$app->get('/zaman', 'getZaman');
+$app->put('/zaman/1', 'updateZaman');
+
 // Cihazlar
 $app->get('/device', 'getDevices');
 $app->get('/device/:uniqueId', 'getDevice');
@@ -37,6 +41,41 @@ $app->delete('/user/:id', 'deleteUser');
 $app->post('/login', 'login');
 
 $app->run();
+
+/* CIHAZLAR
+ * *****************************************************************************
+ */
+
+function getZaman() {
+    $sql = "SELECT * FROM zaman WHERE id=1";
+    try {
+        $db = getConnection();
+        $stmt = $db->query($sql);
+        $zaman = $stmt->fetchObject();
+        $db = NULL;
+        echo json_encode($zaman);
+    } catch (Exception $exc) {
+        echo '{"error":{"text":' . $exc->getMessage() . '}}';
+    }
+}
+
+function updateZaman() {
+    $request = Slim::getInstance()->request();
+    $body = $request->getBody();
+    $zaman = json_decode($body);
+    $sql = "UPDATE zaman SET timeStart=:timeStart, timeEnd=:timeEnd WHERE id=1";
+    try {
+        $db = getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam("timeStart", $zaman->timeStart);
+        $stmt->bindParam("timeEnd", $zaman->timeEnd);
+        $stmt->execute();
+        $db = null;
+        echo json_encode($zaman);
+    } catch (PDOException $exc) {
+        echo '{"error":{"text":' . $exc->getMessage() . '}}';
+    }
+}
 
 /* CIHAZLAR
  * *****************************************************************************
@@ -446,7 +485,7 @@ function findUserByName($query) {
     }
 }
 
-function login(){
+function login() {
     $request = Slim::getInstance()->request();
     $login = json_decode($request->getBody());
     $sql = "SELECT * FROM user WHERE userName=:userName AND userPassword=:userPassword";
@@ -456,7 +495,8 @@ function login(){
         $stmt->bindParam("userName", $login->userName);
         $stmt->bindParam("userPassword", $login->userPassword);
         $stmt->execute();
-        $login = $stmt->fetchObject();;
+        $login = $stmt->fetchObject();
+        ;
         $db = null;
         echo json_encode($login);
     } catch (PDOException $exc) {

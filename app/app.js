@@ -1,7 +1,7 @@
 angular.module('Authentication', []);
 angular.module('Home', []);
-angular.module('adminModule', []);
-var app = angular.module('app', ['ngCookies', 'ngResource', 'ngRoute', 'restangular', 'Authentication', 'ui.bootstrap.datetimepicker', 'Home', 'adminModule']);
+var app = angular.module('app', ['ngCookies', 'ngResource', 'ngRoute', 'restangular',
+    'Authentication', 'ui.bootstrap.datetimepicker', 'Home', 'adminModule', 'zamanModule']);
 
 
 app.controller('ApplicationController', function ($rootScope, $scope) {
@@ -24,6 +24,22 @@ app.config(['$routeProvider', 'RestangularProvider', function ($routeProvider, R
                 .when('/device/:uniqueId', {
                     controller: 'DeviceCtrl',
                     templateUrl: 'app/modules/device/device.tpl.html'
+                })
+                .when('/zaman', {
+                    controller: 'ZamanController',
+                    templateUrl: 'app/modules/zaman/zaman.tpl.html'
+                })
+                .when('/oyunlar', {
+                    controller: 'HomeController',
+                    templateUrl: 'app/modules/home/home.html'
+                })
+                .when('/oyunekle', {
+                    controller: 'HomeController',
+                    templateUrl: 'app/modules/home/home.html'
+                })
+                .when('/skorlar', {
+                    controller: 'HomeController',
+                    templateUrl: 'app/modules/home/home.html'
                 })
                 .when('/', {
                     controller: 'HomeController',

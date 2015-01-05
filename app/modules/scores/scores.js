@@ -15,10 +15,10 @@ angular.module('scoreModule', [])
                                     score.gameName = game.gameName;
                                     score.gameId = game.gameId;
                                     angular.forEach(devices, function (device) {
-                                    if (device.uniqueId == score.device_unique_id) {
-                                        game.list.push({device: device.uniqueId, score: score.score});
-                                    }
-                                });
+                                        if (device.uniqueId == score.device_unique_id) {
+                                            game.list.push({device: device.uniqueId, score: score.score});
+                                        }
+                                    });
                                 }
                             });
                             $scope.skorlar.push(game);

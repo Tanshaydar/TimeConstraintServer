@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -40,4 +41,6 @@
  * @author  Josh Lockhart <info@joshlockhart.com>
  * @since   Version 1.0
  */
-class Slim_Exception_Stop extends Exception {}
+class Slim_Exception_Stop extends Exception {
+    
+}

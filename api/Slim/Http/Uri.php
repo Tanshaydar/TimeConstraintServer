@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -40,34 +41,34 @@
  * @since   Version 1.0
  */
 class Slim_Http_Uri {
-    
+
     /**
      * @var string "https" or "http"
      */
     protected static $scheme;
-    
+
     /**
      * @var string
      */
     protected static $baseUri;
-    
+
     /**
      * @var string
      */
     protected static $uri;
-    
+
     /**
      * @var string The URI query string, excluding leading "?"
      */
     protected static $queryString;
-    
+
     /**
      * Get Base URI without trailing slash
      * @param   bool    $reload Force reparse the base URI?
      * @return  string
      */
-    public static function getBaseUri( $reload = false ) {
-        if ( $reload || is_null(self::$baseUri) ) {
+    public static function getBaseUri($reload = false) {
+        if ($reload || is_null(self::$baseUri)) {
             $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF']; //Full Request URI
             $scriptName = $_SERVER['SCRIPT_NAME']; //Script path from docroot
             $baseUri = strpos($requestUri, $scriptName) === 0 ? $scriptName : str_replace('\\', '/', dirname($scriptName));
@@ -82,21 +83,21 @@ class Slim_Http_Uri {
      * @return  string
      * @throws  RuntimeException    If unable if unable to determine URI
      */
-    public static function getUri( $reload = false ) {
-        if ( $reload || is_null(self::$uri) ) {
+    public static function getUri($reload = false) {
+        if ($reload || is_null(self::$uri)) {
             $uri = '';
-            if ( !empty($_SERVER['PATH_INFO']) ) {
+            if (!empty($_SERVER['PATH_INFO'])) {
                 $uri = $_SERVER['PATH_INFO'];
             } else {
-                if ( isset($_SERVER['REQUEST_URI']) ) {
+                if (isset($_SERVER['REQUEST_URI'])) {
                     $uri = parse_url(self::getScheme() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], PHP_URL_PATH);
-                } else if ( isset($_SERVER['PHP_SELF']) ) {
+                } else if (isset($_SERVER['PHP_SELF'])) {
                     $uri = $_SERVER['PHP_SELF'];
                 } else {
                     throw new RuntimeException('Unable to detect request URI');
                 }
             }
-            if ( self::getBaseUri() !== '' && strpos($uri, self::getBaseUri()) === 0 ) {
+            if (self::getBaseUri() !== '' && strpos($uri, self::getBaseUri()) === 0) {
                 $uri = substr($uri, strlen(self::getBaseUri()));
             }
             self::$uri = '/' . ltrim($uri, '/');
@@ -109,8 +110,8 @@ class Slim_Http_Uri {
      * @param   bool    $reload For reparse the URL scheme?
      * @return  string  "https" or "http"
      */
-    public static function getScheme( $reload = false ) {
-        if ( $reload || is_null(self::$scheme) ) {
+    public static function getScheme($reload = false) {
+        if ($reload || is_null(self::$scheme)) {
             self::$scheme = ( empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off' ) ? 'http' : 'https';
         }
         return self::$scheme;
@@ -121,8 +122,8 @@ class Slim_Http_Uri {
      * @param   bool    $reload For reparse the URL query string?
      * @return  string
      */
-    public static function getQueryString( $reload = false ) {
-        if ( $reload || is_null(self::$queryString) ) {
+    public static function getQueryString($reload = false) {
+        if ($reload || is_null(self::$queryString)) {
             self::$queryString = $_SERVER['QUERY_STRING'];
         }
         return self::$queryString;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -65,7 +66,7 @@ class Slim_Logger {
      * @param   string  $directory  Absolute or relative path to log directory
      * @param   int     $level      The maximum log level reported by this Logger
      */
-    public function __construct( $directory, $level = 4 ) {
+    public function __construct($directory, $level = 4) {
         $this->setDirectory($directory);
         $this->setLevel($level);
     }
@@ -75,9 +76,9 @@ class Slim_Logger {
      * @param   string  $directory  Absolute or relative path to log directory
      * @return  void
      */
-    public function setDirectory( $directory ) {
+    public function setDirectory($directory) {
         $realPath = realpath($directory);
-        if ( $realPath ) {
+        if ($realPath) {
             $this->directory = rtrim($realPath, '/') . '/';
         } else {
             $this->directory = false;
@@ -98,9 +99,9 @@ class Slim_Logger {
      * @return  void
      * @throws  InvalidArgumentException    If level specified is not 0, 1, 2, 3, 4
      */
-    public function setLevel( $level ) {
-        $theLevel = (int)$level;
-        if ( $theLevel >= 0 && $theLevel <= 4 ) {
+    public function setLevel($level) {
+        $theLevel = (int) $level;
+        if ($theLevel >= 0 && $theLevel <= 4) {
             $this->level = $theLevel;
         } else {
             throw new InvalidArgumentException('Invalid Log Level. Must be one of: 0, 1, 2, 3, 4.');
@@ -120,7 +121,7 @@ class Slim_Logger {
      * @param   mixed $data
      * @return  void
      */
-    public function debug( $data ) {
+    public function debug($data) {
         $this->log($data, 4);
     }
 
@@ -129,7 +130,7 @@ class Slim_Logger {
      * @param   mixed $data
      * @return  void
      */
-    public function info( $data ) {
+    public function info($data) {
         $this->log($data, 3);
     }
 
@@ -138,7 +139,7 @@ class Slim_Logger {
      * @param   mixed $data
      * @return  void
      */
-    public function warn( $data ) {
+    public function warn($data) {
         $this->log($data, 2);
     }
 
@@ -147,7 +148,7 @@ class Slim_Logger {
      * @param   mixed $data
      * @return  void
      */
-    public function error( $data ) {
+    public function error($data) {
         $this->log($data, 1);
     }
 
@@ -156,7 +157,7 @@ class Slim_Logger {
      * @param   mixed $data
      * @return  void
      */
-    public function fatal( $data ) {
+    public function fatal($data) {
         $this->log($data, 0);
     }
 
@@ -175,16 +176,16 @@ class Slim_Logger {
      * @return  void
      * @throws  RuntimeException    If log directory not found or not writable
      */
-    protected function log( $data, $level ) {
+    protected function log($data, $level) {
         $dir = $this->getDirectory();
-        if ( $dir == false || !is_dir($dir) ) {
+        if ($dir == false || !is_dir($dir)) {
             throw new RuntimeException("Log directory '$dir' invalid.");
         }
-        if ( !is_writable($dir) ) {
+        if (!is_writable($dir)) {
             throw new RuntimeException("Log directory '$dir' not writable.");
         }
-        if ( $level <= $this->getLevel() ) {
-            $this->write(sprintf("[%s] %s - %s\r\n", $this->levels[$level], date('c'), (string)$data));
+        if ($level <= $this->getLevel()) {
+            $this->write(sprintf("[%s] %s - %s\r\n", $this->levels[$level], date('c'), (string) $data));
         }
     }
 
@@ -193,7 +194,7 @@ class Slim_Logger {
      * @param   string Log message
      * @return  void
      */
-    protected function write( $data ) {
+    protected function write($data) {
         @file_put_contents($this->getFile(), $data, FILE_APPEND | LOCK_EX);
     }
 

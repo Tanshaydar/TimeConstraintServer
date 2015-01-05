@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -90,7 +91,7 @@ class Slim_Http_Cookie {
      * @param   bool    $httponly   When TRUE the cookie will be made accessible only through the HTTP protocol
      * @return  void
      */
-    public function __construct( $name, $value = null, $expires = 0, $path = null, $domain = null, $secure = false, $httponly = false ) {
+    public function __construct($name, $value = null, $expires = 0, $path = null, $domain = null, $secure = false, $httponly = false) {
         $this->setName($name);
         $this->setValue($value);
         $this->setExpires($expires);
@@ -113,8 +114,8 @@ class Slim_Http_Cookie {
      * @param   string $name
      * @return  void
      */
-    public function setName( $name ) {
-        $this->name = (string)$name;
+    public function setName($name) {
+        $this->name = (string) $name;
     }
 
     /**
@@ -130,8 +131,8 @@ class Slim_Http_Cookie {
      * @param   string $value
      * @return  void
      */
-    public function setValue( $value ) {
-        $this->value = (string)$value;
+    public function setValue($value) {
+        $this->value = (string) $value;
     }
 
     /**
@@ -147,8 +148,8 @@ class Slim_Http_Cookie {
      * @param   string|int Cookie expiration time
      * @return  void
      */
-    public function setExpires( $time ) {
-        $this->expires = is_string($time) ? strtotime($time) : (int)$time;
+    public function setExpires($time) {
+        $this->expires = is_string($time) ? strtotime($time) : (int) $time;
     }
 
     /**
@@ -164,8 +165,8 @@ class Slim_Http_Cookie {
      * @param   string $path
      * @return  void
      */
-    public function setPath( $path ) {
-        $this->path = (string)$path;
+    public function setPath($path) {
+        $this->path = (string) $path;
     }
 
     /**
@@ -181,8 +182,8 @@ class Slim_Http_Cookie {
      * @param   string $domain
      * @return  void
      */
-    public function setDomain( $domain ) {
-        $this->domain = (string)$domain;
+    public function setDomain($domain) {
+        $this->domain = (string) $domain;
     }
 
     /**
@@ -198,8 +199,8 @@ class Slim_Http_Cookie {
      * @param   bool $secure
      * @return  void
      */
-    public function setSecure( $secure ) {
-        $this->secure = (bool)$secure;
+    public function setSecure($secure) {
+        $this->secure = (bool) $secure;
     }
 
     /**
@@ -215,8 +216,8 @@ class Slim_Http_Cookie {
      * @param   bool $httponly
      * @return  void
      */
-    public function setHttpOnly( $httponly ) {
-        $this->httponly = (bool)$httponly;
+    public function setHttpOnly($httponly) {
+        $this->httponly = (bool) $httponly;
     }
 
 }

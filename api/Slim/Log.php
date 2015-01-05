@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -74,8 +75,8 @@ class Slim_Log {
      * @param   bool    $enabled
      * @return  void
      */
-    public function setEnabled( $enabled ) {
-        if ( $enabled ) {
+    public function setEnabled($enabled) {
+        if ($enabled) {
             $this->enabled = true;
         } else {
             $this->enabled = false;
@@ -95,7 +96,7 @@ class Slim_Log {
      * @param   mixed           $object
      * @return  mixed|false     What the Logger returns, or false if Logger not set or not enabled
      */
-    public function debug( $object ) {
+    public function debug($object) {
         return isset($this->logger) && $this->isEnabled() ? $this->logger->debug($object) : false;
     }
 
@@ -104,7 +105,7 @@ class Slim_Log {
      * @param   mixed           $object
      * @return  mixed|false     What the Logger returns, or false if Logger not set or not enabled
      */
-    public function info( $object ) {
+    public function info($object) {
         return isset($this->logger) && $this->isEnabled() ? $this->logger->info($object) : false;
     }
 
@@ -113,7 +114,7 @@ class Slim_Log {
      * @param   mixed           $object
      * @return  mixed|false     What the Logger returns, or false if Logger not set or not enabled
      */
-    public function warn( $object ) {
+    public function warn($object) {
         return isset($this->logger) && $this->isEnabled() ? $this->logger->warn($object) : false;
     }
 
@@ -122,7 +123,7 @@ class Slim_Log {
      * @param   mixed           $object
      * @return  mixed|false     What the Logger returns, or false if Logger not set or not enabled
      */
-    public function error( $object ) {
+    public function error($object) {
         return isset($this->logger) && $this->isEnabled() ? $this->logger->error($object) : false;
     }
 
@@ -131,7 +132,7 @@ class Slim_Log {
      * @param   mixed           $object
      * @return  mixed|false     What the Logger returns, or false if Logger not set or not enabled
      */
-    public function fatal( $object ) {
+    public function fatal($object) {
         return isset($this->logger) && $this->isEnabled() ? $this->logger->fatal($object) : false;
     }
 
@@ -140,7 +141,7 @@ class Slim_Log {
      * @param   mixed   $logger
      * @return  void
      */
-    public function setLogger( $logger ) {
+    public function setLogger($logger) {
         $this->logger = $logger;
     }
 

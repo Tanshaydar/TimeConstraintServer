@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -44,7 +45,7 @@
  */
 class Slim_Session_Handler_Cookies extends Slim_Session_Handler {
 
-    public function open( $savePath, $sessionName ) {
+    public function open($savePath, $sessionName) {
         return true;
     }
 
@@ -52,19 +53,19 @@ class Slim_Session_Handler_Cookies extends Slim_Session_Handler {
         return true; //Not used
     }
 
-    public function read( $id ) {
+    public function read($id) {
         return $this->app->getEncryptedCookie($id);
     }
 
-    public function write( $id, $sessionData ) {
+    public function write($id, $sessionData) {
         $this->app->setEncryptedCookie($id, $sessionData, 0);
     }
 
-    public function destroy( $id ) {
+    public function destroy($id) {
         $this->app->deleteCookie($id);
     }
 
-    public function gc( $maxLifetime ) {
+    public function gc($maxLifetime) {
         return true; //Not used
     }
 

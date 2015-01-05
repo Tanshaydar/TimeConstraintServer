@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -89,7 +90,7 @@ class Slim_Route {
      * @param   string  $pattern    The URL pattern (ie. "/books/:id")
      * @param   mixed   $callable   Anything that returns TRUE for is_callable()
      */
-    public function __construct( $pattern, $callable ) {
+    public function __construct($pattern, $callable) {
         $this->setPattern($pattern);
         $this->setCallable($callable);
         $this->setConditions(self::getDefaultConditions());
@@ -100,7 +101,7 @@ class Slim_Route {
      * @param   array $defaultConditions
      * @return  void
      */
-    public static function setDefaultConditions( array $defaultConditions ) {
+    public static function setDefaultConditions(array $defaultConditions) {
         self::$defaultConditions = $defaultConditions;
     }
 
@@ -125,8 +126,8 @@ class Slim_Route {
      * @param   string $pattern
      * @return  void
      */
-    public function setPattern( $pattern ) {
-        $this->pattern = str_replace(')', ')?', (string)$pattern);
+    public function setPattern($pattern) {
+        $this->pattern = str_replace(')', ')?', (string) $pattern);
     }
 
     /**
@@ -159,7 +160,7 @@ class Slim_Route {
      * @param   array $conditions
      * @return  void
      */
-    public function setConditions( array $conditions ) {
+    public function setConditions(array $conditions) {
         $this->conditions = $conditions;
     }
 
@@ -176,8 +177,8 @@ class Slim_Route {
      * @param   string $name
      * @return  void
      */
-    public function setName( $name ) {
-        $this->name = (string)$name;
+    public function setName($name) {
+        $this->name = (string) $name;
         $this->router->cacheNamedRoute($this->name, $this);
     }
 
@@ -229,7 +230,7 @@ class Slim_Route {
      * Detect support for an HTTP method
      * @return bool
      */
-    public function supportsHttpMethod( $method ) {
+    public function supportsHttpMethod($method) {
         return in_array($method, $this->methods);
     }
 
@@ -246,7 +247,7 @@ class Slim_Route {
      * @param   Slim_Router $router
      * @return  void
      */
-    public function setRouter( Slim_Router $router ) {
+    public function setRouter(Slim_Router $router) {
         $this->router = $router;
     }
 
@@ -273,10 +274,10 @@ class Slim_Route {
      * @return  Slim_Route
      * @throws  InvalidArgumentException If argument is not callable or not an array
      */
-    public function setMiddleware( $middleware ) {
-        if ( is_callable($middleware) ) {
+    public function setMiddleware($middleware) {
+        if (is_callable($middleware)) {
             $this->middleware[] = $middleware;
-        } else if ( is_array($middleware) ) {
+        } else if (is_array($middleware)) {
             $this->middleware = array_merge($this->middleware, $middleware);
         } else {
             throw new InvalidArgumentException('Route middleware must be callable or an array of callables');
@@ -295,24 +296,24 @@ class Slim_Route {
      * @param   string  $resourceUri A Request URI
      * @return  bool
      */
-    public function matches( $resourceUri ) {
+    public function matches($resourceUri) {
         //Extract URL params
         preg_match_all('@:([\w]+)@', $this->pattern, $paramNames, PREG_PATTERN_ORDER);
         $paramNames = $paramNames[0];
 
         //Convert URL params into regex patterns, construct a regex for this route
         $patternAsRegex = preg_replace_callback('@:[\w]+@', array($this, 'convertPatternToRegex'), $this->pattern);
-        if ( substr($this->pattern, -1) === '/' ) {
+        if (substr($this->pattern, -1) === '/') {
             $patternAsRegex = $patternAsRegex . '?';
         }
         $patternAsRegex = '@^' . $patternAsRegex . '$@';
 
         //Cache URL params' names and values if this route matches the current HTTP request
-        if ( preg_match($patternAsRegex, $resourceUri, $paramValues) ) {
+        if (preg_match($patternAsRegex, $resourceUri, $paramValues)) {
             array_shift($paramValues);
-            foreach ( $paramNames as $index => $value ) {
+            foreach ($paramNames as $index => $value) {
                 $val = substr($value, 1);
-                if ( isset($paramValues[$val]) ) {
+                if (isset($paramValues[$val])) {
                     $this->params[$val] = urldecode($paramValues[$val]);
                 }
             }
@@ -327,9 +328,9 @@ class Slim_Route {
      * @param   array   URL parameters
      * @return  string  Regular expression for URL parameter
      */
-    protected function convertPatternToRegex( $matches ) {
+    protected function convertPatternToRegex($matches) {
         $key = str_replace(':', '', $matches[0]);
-        if ( array_key_exists($key, $this->conditions) ) {
+        if (array_key_exists($key, $this->conditions)) {
             return '(?P<' . $key . '>' . $this->conditions[$key] . ')';
         } else {
             return '(?P<' . $key . '>[a-zA-Z0-9_\-\.\!\~\*\\\'\(\)\:\@\&\=\$\+,%]+)';
@@ -341,7 +342,7 @@ class Slim_Route {
      * @param   string $name The name of the route
      * @return  Slim_Route
      */
-    public function name( $name ) {
+    public function name($name) {
         $this->setName($name);
         return $this;
     }
@@ -351,7 +352,7 @@ class Slim_Route {
      * @param   array $conditions Key-value array of URL parameter conditions
      * @return  Slim_Route
      */
-    public function conditions( array $conditions ) {
+    public function conditions(array $conditions) {
         $this->conditions = array_merge($this->conditions, $conditions);
         return $this;
     }
@@ -378,17 +379,17 @@ class Slim_Route {
      * @throws  Slim_Exception_RequestSlash
      */
     public function dispatch() {
-        if ( substr($this->pattern, -1) === '/' && substr($this->router->getRequest()->getResourceUri(), -1) !== '/' ) {
+        if (substr($this->pattern, -1) === '/' && substr($this->router->getRequest()->getResourceUri(), -1) !== '/') {
             throw new Slim_Exception_RequestSlash();
         }
         //Invoke middleware
-        foreach ( $this->middleware as $mw ) {
-            if ( is_callable($mw) ) {
+        foreach ($this->middleware as $mw) {
+            if (is_callable($mw)) {
                 call_user_func($mw);
             }
         }
         //Invoke callable
-        if ( is_callable($this->getCallable()) ) {
+        if (is_callable($this->getCallable())) {
             call_user_func_array($this->callable, array_values($this->params));
             return true;
         }

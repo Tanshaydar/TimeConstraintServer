@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -60,7 +61,9 @@ class Slim_View {
      *
      * This is empty but may be overridden in a subclass
      */
-    public function __construct() {}
+    public function __construct() {
+        
+    }
 
     /**
      * Get data
@@ -69,8 +72,8 @@ class Slim_View {
      *                              if $key, or NULL if $key but datum
      *                              does not exist.
      */
-    public function getData( $key = null ) {
-        if ( !is_null($key) ) {
+    public function getData($key = null) {
+        if (!is_null($key)) {
             return isset($this->data[$key]) ? $this->data[$key] : null;
         } else {
             return $this->data;
@@ -96,10 +99,10 @@ class Slim_View {
      */
     public function setData() {
         $args = func_get_args();
-        if ( count($args) === 1 && is_array($args[0]) ) {
+        if (count($args) === 1 && is_array($args[0])) {
             $this->data = $args[0];
-        } else if ( count($args) === 2 ) {
-            $this->data[(string)$args[0]] = $args[1];
+        } else if (count($args) === 2) {
+            $this->data[(string) $args[0]] = $args[1];
         } else {
             throw new InvalidArgumentException('Cannot set View data with provided arguments. Usage: `View::setData( $key, $value );` or `View::setData([ key => value, ... ]);`');
         }
@@ -110,7 +113,7 @@ class Slim_View {
      * @param   array $data
      * @return  void
      */
-    public function appendData( array $data ) {
+    public function appendData(array $data) {
         $this->data = array_merge($this->data, $data);
     }
 
@@ -128,8 +131,8 @@ class Slim_View {
      * @return  void
      * @throws  RuntimeException If directory is not a directory or does not exist
      */
-    public function setTemplatesDirectory( $dir ) {
-        if ( !is_dir($dir) ) {
+    public function setTemplatesDirectory($dir) {
+        if (!is_dir($dir)) {
             throw new RuntimeException('Cannot set View templates directory to: ' . $dir . '. Directory does not exist.');
         }
         $this->templatesDirectory = rtrim($dir, '/');
@@ -143,7 +146,7 @@ class Slim_View {
      * @param   string $template Path to template file relative to templates directoy
      * @return  void
      */
-    public function display( $template ) {
+    public function display($template) {
         echo $this->render($template);
     }
 
@@ -153,10 +156,10 @@ class Slim_View {
      * @return  string              Rendered template
      * @throws  RuntimeException    If template does not exist
      */
-    public function render( $template ) {
+    public function render($template) {
         extract($this->data);
         $templatePath = $this->getTemplatesDirectory() . '/' . ltrim($template, '/');
-        if ( !file_exists($templatePath) ) {
+        if (!file_exists($templatePath)) {
             throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }
         ob_start();

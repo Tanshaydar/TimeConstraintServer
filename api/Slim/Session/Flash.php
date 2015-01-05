@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -79,8 +80,8 @@ class Slim_Session_Flash implements ArrayAccess {
      * @param   string $sessionKey
      * @return  void
      */
-    public function __construct( $sessionKey = null ) {
-        if ( !is_null($sessionKey) ) {
+    public function __construct($sessionKey = null) {
+        if (!is_null($sessionKey)) {
             $this->setSessionKey($sessionKey);
         }
         $this->load();
@@ -92,11 +93,11 @@ class Slim_Session_Flash implements ArrayAccess {
      * @throws  RuntimeException If session key is null
      * @return  Slim_Session_Flash
      */
-    public function setSessionKey( $key ) {
-        if ( is_null($key) ) {
+    public function setSessionKey($key) {
+        if (is_null($key)) {
             throw new RuntimeException('Session key cannot be null');
         }
-        $this->sessionKey = (string)$key;
+        $this->sessionKey = (string) $key;
         return $this;
     }
 
@@ -114,8 +115,8 @@ class Slim_Session_Flash implements ArrayAccess {
      * @param   string              $value
      * @return  Slim_Session_Flash
      */
-    public function now( $key, $value ) {
-        $this->messages['now'][(string)$key] = $value;
+    public function now($key, $value) {
+        $this->messages['now'][(string) $key] = $value;
         return $this->save();
     }
 
@@ -125,8 +126,8 @@ class Slim_Session_Flash implements ArrayAccess {
      * @param   string              $value
      * @return  Slim_Session_Flash
      */
-    public function set( $key, $value ) {
-        $this->messages['next'][(string)$key] = $value;
+    public function set($key, $value) {
+        $this->messages['next'][(string) $key] = $value;
         return $this->save();
     }
 
@@ -153,7 +154,7 @@ class Slim_Session_Flash implements ArrayAccess {
      * @return Slim_Session_Flash
      */
     public function keep() {
-        foreach ( $this->messages['prev'] as $key => $val ) {
+        foreach ($this->messages['prev'] as $key => $val) {
             $this->messages['next'][$key] = $val;
         }
         return $this->save();
@@ -168,23 +169,23 @@ class Slim_Session_Flash implements ArrayAccess {
         return $this;
     }
 
-    /***** ARRAY ACCESS INTERFACE *****/
+    /*     * *** ARRAY ACCESS INTERFACE **** */
 
-    public function offsetExists( $offset ) {
+    public function offsetExists($offset) {
         $messages = $this->getMessages();
         return isset($messages[$offset]);
     }
 
-    public function offsetGet( $offset ) {
+    public function offsetGet($offset) {
         $messages = $this->getMessages();
         return isset($messages[$offset]) ? $messages[$offset] : null;
     }
 
-    public function offsetSet( $offset, $value ) {
+    public function offsetSet($offset, $value) {
         $this->now($offset, $value);
     }
 
-    public function offsetUnset( $offset ) {
+    public function offsetUnset($offset) {
         unset($this->messages['prev'][$offset]);
         unset($this->messages['now'][$offset]);
     }

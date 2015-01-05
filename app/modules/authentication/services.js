@@ -8,10 +8,10 @@ angular.module('Authentication')
                         service.Login = function (username, password, callback) {
 
                             var response = {success: null, message: "Hata!"};
-                            $timeout(function () {                                
-                                Restangular.all('login').post({userName:username, userPassword:password}).then( function(success){
+                            $timeout(function () {
+                                Restangular.all('login').post({userName: username, userPassword: password}).then(function (success) {
                                     console.log("suc");
-                                    if( success.userId) {
+                                    if (success.userId) {
                                         response.success = true;
                                         response.message = 'Giriş başarılı!';
                                     } else {

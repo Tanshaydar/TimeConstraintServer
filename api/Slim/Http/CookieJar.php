@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -98,31 +99,31 @@ class Slim_Http_CookieJar {
      * @throws  Exception               If secret key is empty
      * @throws  Exception               If unable to open mcypt module
      */
-    public function __construct( $secret, $config = null ) {
-        if ( empty($secret) ) {
+    public function __construct($secret, $config = null) {
+        if (empty($secret)) {
             throw new Exception('You must provide a secret key');
         }
         $this->_secret = $secret;
-        if ( $config !== null && !is_array($config) ) {
+        if ($config !== null && !is_array($config)) {
             throw new Exception('Config must be an array');
         }
-        if ( is_array($config) ) {
-            if ( isset($config['high_confidentiality']) ) {
+        if (is_array($config)) {
+            if (isset($config['high_confidentiality'])) {
                 $this->_highConfidentiality = $config['high_confidentiality'];
             }
-            if ( isset($config['mcrypt_algorithm']) ) {
+            if (isset($config['mcrypt_algorithm'])) {
                 $this->_algorithm = $config['mcrypt_algorithm'];
             }
-            if ( isset($config['mcrypt_mode']) ) {
+            if (isset($config['mcrypt_mode'])) {
                 $this->_mode = $config['mcrypt_mode'];
             }
-            if ( isset($config['enable_ssl']) ) {
+            if (isset($config['enable_ssl'])) {
                 $this->_ssl = $config['enable_ssl'];
             }
         }
-        if ( extension_loaded('mcrypt') ) {
+        if (extension_loaded('mcrypt')) {
             $this->_cryptModule = mcrypt_module_open($this->_algorithm, '', $this->_mode, '');
-            if ( $this->_cryptModule === false ) {
+            if ($this->_cryptModule === false) {
                 throw new Exception('Error while loading mcrypt module');
             }
         }
@@ -143,8 +144,8 @@ class Slim_Http_CookieJar {
      * @param   bool        $enable  TRUE to enable, FALSE to disable
      * @return  CookieJar
      */
-    public function setHighConfidentiality( $enable ) {
-        $this->_highConfidentiality = (bool)$enable;
+    public function setHighConfidentiality($enable) {
+        $this->_highConfidentiality = (bool) $enable;
         return $this;
     }
 
@@ -166,8 +167,8 @@ class Slim_Http_CookieJar {
      * @param   bool        $enable TRUE to enable, FALSE to disable
      * @return  CookieJar
      */
-    public function setSSL( $enable ) {
-        $this->_ssl = (bool)$enable;
+    public function setSSL($enable) {
+        $this->_ssl = (bool) $enable;
         return $this;
     }
 
@@ -188,7 +189,7 @@ class Slim_Http_CookieJar {
      * @param   string $cookiename The name of the Cookie
      * @return  Cookie|null Cookie, or NULL if Cookie with name not found
      */
-    public function getResponseCookie( $cookiename ) {
+    public function getResponseCookie($cookiename) {
         return isset($this->_cookies[$cookiename]) ? $this->_cookies[$cookiename] : null;
     }
 
@@ -204,7 +205,7 @@ class Slim_Http_CookieJar {
      * @param   bool    $secure     When TRUE, send the cookie only on a secure connection
      * @param   bool    $httponly   When TRUE the cookie will be made accessible only through the HTTP protocol
      */
-    public function setCookie( $cookiename, $value, $username, $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = null ) {
+    public function setCookie($cookiename, $value, $username, $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = null) {
         $secureValue = extension_loaded('mcrypt') ? $this->_secureCookieValue($value, $username, $expire) : $value;
         $this->setClassicCookie($cookiename, $secureValue, $expire, $path, $domain, $secure, $httponly);
     }
@@ -218,7 +219,7 @@ class Slim_Http_CookieJar {
      * @param   bool    $secure     When TRUE, send the cookie only on a secure connection
      * @param   bool    $httponly   When TRUE the cookie will be made accessible only through the HTTP protocol
      */
-    public function deleteCookie( $name, $path = '/', $domain = '', $secure = false, $httponly = null ) {
+    public function deleteCookie($name, $path = '/', $domain = '', $secure = false, $httponly = null) {
         $expire = 315554400; /* 1980-01-01 */
         $this->_cookies[$name] = new Slim_Http_Cookie($name, '', $expire, $path, $domain, $secure, $httponly);
         //setcookie($name, '', $expire, $path, $domain, $secure, $httponly);
@@ -234,24 +235,24 @@ class Slim_Http_CookieJar {
      * @param   bool            $delete     Destroy the cookie if invalid?
      * @return  string|false                The Cookie value, or FALSE if Cookie invalid
      */
-    public function getCookieValue( $cookiename, $deleteIfInvalid = true ) {
-        if ( $this->cookieExists($cookiename) ) {
-            if ( extension_loaded('mcrypt') ) {
+    public function getCookieValue($cookiename, $deleteIfInvalid = true) {
+        if ($this->cookieExists($cookiename)) {
+            if (extension_loaded('mcrypt')) {
                 $cookieValues = explode('|', $_COOKIE[$cookiename]);
-                if ( (count($cookieValues) === 4) && ($cookieValues[1] == 0 || $cookieValues[1] >= time()) ) {
+                if ((count($cookieValues) === 4) && ($cookieValues[1] == 0 || $cookieValues[1] >= time())) {
                     $key = hash_hmac('sha1', $cookieValues[0] . $cookieValues[1], $this->_secret);
                     $cookieData = base64_decode($cookieValues[2]);
-                    if ( $cookieData !== '' && $this->getHighConfidentiality() ) {
+                    if ($cookieData !== '' && $this->getHighConfidentiality()) {
                         $data = $this->_decrypt($cookieData, $key, md5($cookieValues[1]));
                     } else {
                         $data = $cookieData;
                     }
-                    if ( $this->_ssl && isset($_SERVER['SSL_SESSION_ID']) ) {
+                    if ($this->_ssl && isset($_SERVER['SSL_SESSION_ID'])) {
                         $verifKey = hash_hmac('sha1', $cookieValues[0] . $cookieValues[1] . $data . $_SERVER['SSL_SESSION_ID'], $key);
                     } else {
                         $verifKey = hash_hmac('sha1', $cookieValues[0] . $cookieValues[1] . $data, $key);
                     }
-                    if ( $verifKey == $cookieValues[3] ) {
+                    if ($verifKey == $cookieValues[3]) {
                         return $data;
                     }
                 }
@@ -259,7 +260,7 @@ class Slim_Http_CookieJar {
                 return $_COOKIE[$cookiename];
             }
         }
-        if ( $deleteIfInvalid ) {
+        if ($deleteIfInvalid) {
             $this->deleteCookie($cookiename);
         }
         return false;
@@ -276,9 +277,9 @@ class Slim_Http_CookieJar {
      * @param   bool    $secure     When TRUE, send the cookie only on a secure connection
      * @param   bool    $httponly   When TRUE the cookie will be made accessible only through the HTTP protocol
      */
-    public function setClassicCookie( $cookiename, $value, $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = null ) {
+    public function setClassicCookie($cookiename, $value, $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = null) {
         /* httponly option is only available for PHP version >= 5.2 */
-        if ( $httponly === null ) {
+        if ($httponly === null) {
             $this->_cookies[$cookiename] = new Slim_Http_Cookie($cookiename, $value, $expire, $path, $domain, $secure);
             //setcookie($cookiename, $value, $expire, $path, $domain, $secure);
         } else {
@@ -312,17 +313,17 @@ class Slim_Http_CookieJar {
      * @param   integer $expire     Expiration time
      * @return  string              Secured value
      */
-    protected function _secureCookieValue( $value, $username, $expire ) {
-        if ( is_string($expire) ) {
+    protected function _secureCookieValue($value, $username, $expire) {
+        if (is_string($expire)) {
             $expire = strtotime($expire);
         }
         $key = hash_hmac('sha1', $username . $expire, $this->_secret);
-        if ( $value !== '' && $this->getHighConfidentiality() ) {
+        if ($value !== '' && $this->getHighConfidentiality()) {
             $encryptedValue = base64_encode($this->_encrypt($value, $key, md5($expire)));
         } else {
             $encryptedValue = base64_encode($value);
         }
-        if ( $this->_ssl && isset($_SERVER['SSL_SESSION_ID']) ) {
+        if ($this->_ssl && isset($_SERVER['SSL_SESSION_ID'])) {
             $verifKey = hash_hmac('sha1', $username . $expire . $value . $_SERVER['SSL_SESSION_ID'], $key);
         } else {
             $verifKey = hash_hmac('sha1', $username . $expire . $value, $key);
@@ -339,7 +340,7 @@ class Slim_Http_CookieJar {
      * @param   string  $iv     Initialisation vector
      * @return  string          Encrypted data
      */
-    protected function _encrypt( $data, $key, $iv ) {
+    protected function _encrypt($data, $key, $iv) {
         $iv = $this->_validateIv($iv);
         $key = $this->_validateKey($key);
         mcrypt_generic_init($this->_cryptModule, $key, $iv);
@@ -356,7 +357,7 @@ class Slim_Http_CookieJar {
      * @param   string  $iv     Initialisation vector
      * @return string           Encrypted data
      */
-    protected function _decrypt( $data, $key, $iv ) {
+    protected function _decrypt($data, $key, $iv) {
         $iv = $this->_validateIv($iv);
         $key = $this->_validateKey($key);
         mcrypt_generic_init($this->_cryptModule, $key, $iv);
@@ -376,7 +377,7 @@ class Slim_Http_CookieJar {
      */
     protected function _validateIv($iv) {
         $ivSize = mcrypt_enc_get_iv_size($this->_cryptModule);
-        if ( strlen($iv) > $ivSize ) {
+        if (strlen($iv) > $ivSize) {
             $iv = substr($iv, 0, $ivSize);
         }
         return $iv;
@@ -392,7 +393,7 @@ class Slim_Http_CookieJar {
      */
     protected function _validateKey($key) {
         $keySize = mcrypt_enc_get_key_size($this->_cryptModule);
-        if ( strlen($key) > $keySize ) {
+        if (strlen($key) > $keySize) {
             $key = substr($key, 0, $keySize);
         }
         return $key;

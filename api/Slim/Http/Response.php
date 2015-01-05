@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -140,7 +141,7 @@ class Slim_Http_Response {
     /**
      * Constructor
      */
-    public function __construct( Slim_Http_Request $req ) {
+    public function __construct(Slim_Http_Request $req) {
         $this->request = $req;
         $this->header('Content-Type', 'text/html');
     }
@@ -151,10 +152,10 @@ class Slim_Http_Response {
      * @return  void
      * @throws  InvalidArgumentException If argument is not a valid HTTP version
      */
-    public function httpVersion( $version = null ) {
-        if ( $version ) {
-            $version = (string)$version;
-            if ( $version === '1.0' || $version === '1.1' ) {
+    public function httpVersion($version = null) {
+        if ($version) {
+            $version = (string) $version;
+            if ($version === '1.0' || $version === '1.1') {
                 $this->httpVersion = $version;
             } else {
                 throw new InvalidArgumentException('Invalid HTTP version in Response object');
@@ -169,9 +170,9 @@ class Slim_Http_Response {
      * @return  int
      * @throws  InvalidArgumentException If argument is not a valid HTTP status code
      */
-    public function status( $status = null ) {
-        if ( !is_null($status) ) {
-            if ( !in_array(intval($status), array_keys(self::$messages)) ) {
+    public function status($status = null) {
+        if (!is_null($status)) {
+            if (!in_array(intval($status), array_keys(self::$messages))) {
                 throw new InvalidArgumentException('Cannot set Response status. Provided status code "' . $status . '" is not a valid HTTP response code.');
             }
             $this->status = intval($status);
@@ -193,8 +194,8 @@ class Slim_Http_Response {
      * @param   string      $value  The header value
      * @return  string|null         The header value, or NULL if header not set
      */
-    public function header( $key, $value = null ) {
-        if ( !is_null($value) ) {
+    public function header($key, $value = null) {
+        if (!is_null($value)) {
             $this->headers[$key] = $value;
         }
         return isset($this->headers[$key]) ? $this->headers[$key] : null;
@@ -205,8 +206,8 @@ class Slim_Http_Response {
      * @param   string $body    The new HTTP response body
      * @return  string          The new HTTP response body
      */
-    public function body( $body = null ) {
-        if ( !is_null($body) ) {
+    public function body($body = null) {
+        if (!is_null($body)) {
             $this->body = '';
             $this->length = 0;
             $this->write($body);
@@ -219,8 +220,8 @@ class Slim_Http_Response {
      * @param   string $body    Content to append to the current HTTP response body
      * @return  string          The updated HTTP response body
      */
-    public function write( $body ) {
-        $body = (string)$body;
+    public function write($body) {
+        $body = (string) $body;
         $this->length += strlen($body);
         $this->body .= $body;
         $this->header('Content-Length', $this->length);
@@ -232,7 +233,7 @@ class Slim_Http_Response {
      * @param   Slim_Http_CookieJar $cookieJar
      * @return  void
      */
-    public function setCookieJar( Slim_Http_CookieJar $cookieJar ) {
+    public function setCookieJar(Slim_Http_CookieJar $cookieJar) {
         $this->cookieJar = $cookieJar;
     }
 
@@ -249,7 +250,7 @@ class Slim_Http_Response {
      * @return void
      */
     public function finalize() {
-        if ( in_array($this->status, array(204, 304)) ) {
+        if (in_array($this->status, array(204, 304))) {
             $this->body('');
             unset($this->headers['Content-Type']);
         }
@@ -259,7 +260,7 @@ class Slim_Http_Response {
      * Get message for HTTP status code
      * @return string|null
      */
-    public static function getMessageForCode( $status ) {
+    public static function getMessageForCode($status) {
         return isset(self::$messages[$status]) ? self::$messages[$status] : null;
     }
 
@@ -279,7 +280,7 @@ class Slim_Http_Response {
         //Finalize response
         $this->finalize();
 
-        if ( substr(PHP_SAPI, 0, 3) === 'cgi') {
+        if (substr(PHP_SAPI, 0, 3) === 'cgi') {
             //Send Status header if running with fastcgi
             header('Status: ' . self::getMessageForCode($this->status()));
         } else {
@@ -288,12 +289,12 @@ class Slim_Http_Response {
         }
 
         //Send headers
-        foreach ( $this->headers() as $name => $value ) {
+        foreach ($this->headers() as $name => $value) {
             header("$name: $value");
         }
 
         //Send cookies
-        foreach ( $this->getCookieJar()->getResponseCookies() as $name => $cookie ) {
+        foreach ($this->getCookieJar()->getResponseCookies() as $name => $cookie) {
             setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpires(), $cookie->getPath(), $cookie->getDomain(), $cookie->getSecure(), $cookie->getHttpOnly());
         }
 
@@ -310,10 +311,10 @@ class Slim_Http_Response {
      * @return void
      */
     public function send() {
-        if ( !headers_sent() ) {
+        if (!headers_sent()) {
             $this->sendHeaders();
         }
-        if ( $this->canHaveBody() && $this->request->isHead() === false ) {
+        if ($this->canHaveBody() && $this->request->isHead() === false) {
             echo $this->body;
         }
     }

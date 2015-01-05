@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -78,7 +79,7 @@ class Slim_Router implements IteratorAggregate {
      * Constructor
      * @param Slim_Http_Request $request The HTTP request object
      */
-    public function __construct( Slim_Http_Request $request ) {
+    public function __construct(Slim_Http_Request $request) {
         $this->request = $request;
         $this->routes = array();
     }
@@ -104,7 +105,7 @@ class Slim_Router implements IteratorAggregate {
      * @param   Slim_Http_Request   $req
      * @return  void
      */
-    public function setRequest( Slim_Http_Request $req ) {
+    public function setRequest(Slim_Http_Request $req) {
         $this->request = $req;
     }
 
@@ -112,11 +113,11 @@ class Slim_Router implements IteratorAggregate {
      * Return routes that match the current request
      * @return array[Slim_Route]
      */
-    public function getMatchedRoutes( $reload = false ) {
-        if ( $reload || is_null($this->matchedRoutes) ) {
+    public function getMatchedRoutes($reload = false) {
+        if ($reload || is_null($this->matchedRoutes)) {
             $this->matchedRoutes = array();
-            foreach ( $this->routes as $route ) {
-                if ( $route->matches($this->request->getResourceUri()) ) {
+            foreach ($this->routes as $route) {
+                if ($route->matches($this->request->getResourceUri())) {
                     $this->matchedRoutes[] = $route;
                 }
             }
@@ -130,7 +131,7 @@ class Slim_Router implements IteratorAggregate {
      * @param   mixed       $callable   Anything that returns TRUE for is_callable()
      * @return  Slim_Route
      */
-    public function map( $pattern, $callable ) {
+    public function map($pattern, $callable) {
         $route = new Slim_Route($pattern, $callable);
         $route->setRouter($this);
         $this->routes[] = $route;
@@ -144,8 +145,8 @@ class Slim_Router implements IteratorAggregate {
      * @throws  RuntimeException            If a named route already exists with the same name
      * @return  void
      */
-    public function cacheNamedRoute( $name, Slim_Route $route ) {
-        if ( isset($this->namedRoutes[(string)$name]) ) {
+    public function cacheNamedRoute($name, Slim_Route $route) {
+        if (isset($this->namedRoutes[(string) $name])) {
             throw new RuntimeException('Named route already exists with name: ' . $name);
         }
         $this->namedRoutes[$name] = $route;
@@ -158,13 +159,13 @@ class Slim_Router implements IteratorAggregate {
      * @throws  RuntimeException            If named route not found
      * @return  string                      The URL for the given route populated with the given parameters
      */
-    public function urlFor( $name, $params = array() ) {
-        if ( !isset($this->namedRoutes[(string)$name]) ) {
+    public function urlFor($name, $params = array()) {
+        if (!isset($this->namedRoutes[(string) $name])) {
             throw new RuntimeException('Named route not found for name: ' . $name);
         }
-        $pattern = $this->namedRoutes[(string)$name]->getPattern();
+        $pattern = $this->namedRoutes[(string) $name]->getPattern();
         $search = $replace = array();
-        foreach ( $params as $key => $value ) {
+        foreach ($params as $key => $value) {
             $search[] = ':' . $key;
             $replace[] = $value;
         }
@@ -173,7 +174,7 @@ class Slim_Router implements IteratorAggregate {
         return preg_replace(array(
             '@\(\/?:.+\/??\)\??@',
             '@\?|\(|\)@'
-        ), '', $this->request->getRootUri() . $pattern);
+                ), '', $this->request->getRootUri() . $pattern);
     }
 
     /**
@@ -181,8 +182,8 @@ class Slim_Router implements IteratorAggregate {
      * @param   mixed $callable Anything that returns TRUE for is_callable()
      * @return  mixed
      */
-    public function notFound( $callable = null ) {
-        if ( is_callable($callable) ) {
+    public function notFound($callable = null) {
+        if (is_callable($callable)) {
             $this->notFound = $callable;
         }
         return $this->notFound;
@@ -193,8 +194,8 @@ class Slim_Router implements IteratorAggregate {
      * @param   mixed $callable Anything that returns TRUE for is_callable()
      * @return  mixed
      */
-    public function error( $callable = null ) {
-        if ( is_callable($callable) ) {
+    public function error($callable = null) {
+        if (is_callable($callable)) {
             $this->error = $callable;
         }
         return $this->error;

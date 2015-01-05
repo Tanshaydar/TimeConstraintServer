@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -53,15 +54,10 @@ abstract class Slim_Session_Handler {
      *
      * @return bool
      */
-    final public function register( Slim $app ) {
+    final public function register(Slim $app) {
         $this->app = $app;
         return session_set_save_handler(
-            array($this, 'open'),
-            array($this, 'close'),
-            array($this, 'read'),
-            array($this, 'write'),
-            array($this, 'destroy'),
-            array($this, 'gc')
+                array($this, 'open'), array($this, 'close'), array($this, 'read'), array($this, 'write'), array($this, 'destroy'), array($this, 'gc')
         );
     }
 
@@ -72,7 +68,7 @@ abstract class Slim_Session_Handler {
      * @param string $sessionName
      * @return mixed
      */
-    abstract public function open( $savePath, $sessionName );
+    abstract public function open($savePath, $sessionName);
 
     /**
      * Close session
@@ -87,7 +83,7 @@ abstract class Slim_Session_Handler {
      * @param string $id The session identifier
      * @return string
      */
-    abstract public function read( $id );
+    abstract public function read($id);
 
     /**
      * Write session data with ID
@@ -101,7 +97,7 @@ abstract class Slim_Session_Handler {
      * @param mixed $sessionData The session data
      * @return mixed
      */
-    abstract public function write( $id, $sessionData );
+    abstract public function write($id, $sessionData);
 
     /**
      * Destroy session with ID
@@ -109,7 +105,7 @@ abstract class Slim_Session_Handler {
      * @param string $id The session identifier
      * @return mixed
      */
-    abstract public function destroy( $id );
+    abstract public function destroy($id);
 
     /**
      * Session garbage collection
@@ -120,6 +116,5 @@ abstract class Slim_Session_Handler {
      * @param int $maxLifetime
      * @return mixed
      */
-    abstract public function gc( $maxLifetime );
-
+    abstract public function gc($maxLifetime);
 }

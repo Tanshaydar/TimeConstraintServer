@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Slim - a micro PHP 5 framework
  *
@@ -196,11 +197,11 @@ class Slim_Http_Request {
      * @param   string      $key    The paramter name
      * @return  string|null         The value of parameter, or NULL if parameter not found
      */
-    public function params( $key ) {
-        foreach ( array('put', 'post', 'get') as $dataSource ) {
+    public function params($key) {
+        foreach (array('put', 'post', 'get') as $dataSource) {
             $source = $this->$dataSource;
-            if ( isset($source[(string)$key]) ) {
-                return $source[(string)$key];
+            if (isset($source[(string) $key])) {
+                return $source[(string) $key];
             }
         }
         return null;
@@ -213,7 +214,7 @@ class Slim_Http_Request {
      *                                      and parameter exists, or NULL if $key
      *                                      and parameter does not exist.
      */
-    public function get( $key = null ) {
+    public function get($key = null) {
         return $this->arrayOrArrayValue($this->get, $key);
     }
 
@@ -224,7 +225,7 @@ class Slim_Http_Request {
      *                                      and parameter exists, or NULL if $key
      *                                      and parameter does not exist.
      */
-    public function post( $key = null ) {
+    public function post($key = null) {
         return $this->arrayOrArrayValue($this->post, $key);
     }
 
@@ -235,7 +236,7 @@ class Slim_Http_Request {
      *                                      and parameter exists, or NULL if $key
      *                                      and parameter does not exist.
      */
-    public function put( $key = null ) {
+    public function put($key = null) {
         return $this->arrayOrArrayValue($this->put, $key);
     }
 
@@ -246,7 +247,7 @@ class Slim_Http_Request {
      *                              and parameter exists, or NULL if $key
      *                              and parameter does not exist.
      */
-    public function cookies( $key = null ) {
+    public function cookies($key = null) {
         return $this->arrayOrArrayValue($this->cookies, $key);
     }
 
@@ -257,7 +258,7 @@ class Slim_Http_Request {
      *                              and parameter exists, or NULL if $key
      *                              and parameter does not exist.
      */
-    public function headers( $key = null ) {
+    public function headers($key = null) {
         return is_null($key) ? $this->headers : $this->arrayOrArrayValue($this->headers, $this->convertHttpHeaderName($key));
     }
 
@@ -282,10 +283,10 @@ class Slim_Http_Request {
      * @return string
      */
     public function getContentType() {
-        if ( !isset($this->contentType) ) {
+        if (!isset($this->contentType)) {
             $contentType = 'application/x-www-form-urlencoded';
             $header = $this->headers('CONTENT_TYPE');
-            if ( !is_null($header) ) {
+            if (!is_null($header)) {
                 $headerParts = preg_split('/\s*;\s*/', $header);
                 $contentType = $headerParts[0];
             }
@@ -316,7 +317,7 @@ class Slim_Http_Request {
      * @param   string          $key
      * @return  array|mixed     Array if key is null, else array value
      */
-    protected function arrayOrArrayValue( array &$array, $key = null ) {
+    protected function arrayOrArrayValue(array &$array, $key = null) {
         return is_null($key) ? $array : $this->arrayValueForKey($array, $key);
     }
 
@@ -324,8 +325,8 @@ class Slim_Http_Request {
      * Fetch value from array
      * @return mixed|null
      */
-    protected function arrayValueForKey( array &$array, $key ) {
-        return isset($array[(string)$key]) ? $array[(string)$key] : null;
+    protected function arrayValueForKey(array &$array, $key) {
+        return isset($array[(string) $key]) ? $array[(string) $key] : null;
     }
 
     /**
@@ -333,8 +334,8 @@ class Slim_Http_Request {
      * @param   array|string $rawData
      * @return  array|string
      */
-    public static function stripSlashesIfMagicQuotes( $rawData ) {
-        if ( get_magic_quotes_gpc() ) {
+    public static function stripSlashesIfMagicQuotes($rawData) {
+        if (get_magic_quotes_gpc()) {
             return is_array($rawData) ? array_map(array('self', 'stripSlashesIfMagicQuotes'), $rawData) : stripslashes($rawData);
         } else {
             return $rawData;
@@ -346,9 +347,9 @@ class Slim_Http_Request {
      * @return array Key-value array of HTTP request PUT parameters
      */
     protected function loadPutParameters() {
-        if ( $this->getContentType() === 'application/x-www-form-urlencoded' ) {
+        if ($this->getContentType() === 'application/x-www-form-urlencoded') {
             $input = is_string($this->body) ? $this->body : '';
-            if ( function_exists('mb_parse_str') ) {
+            if (function_exists('mb_parse_str')) {
                 mb_parse_str($input, $output);
             } else {
                 parse_str($input, $output);
@@ -365,9 +366,9 @@ class Slim_Http_Request {
      */
     protected function loadHttpHeaders() {
         $headers = array();
-        foreach ( $_SERVER as $key => $value ) {
+        foreach ($_SERVER as $key => $value) {
             $key = $this->convertHttpHeaderName($key);
-            if ( strpos($key, 'http-') === 0 || in_array($key, $this->additionalHeaders) ) {
+            if (strpos($key, 'http-') === 0 || in_array($key, $this->additionalHeaders)) {
                 $name = str_replace('http-', '', $key);
                 $headers[$name] = $value;
             }
@@ -379,7 +380,7 @@ class Slim_Http_Request {
      * Convert HTTP header name
      * @return string
      */
-    protected function convertHttpHeaderName( $name ) {
+    protected function convertHttpHeaderName($name) {
         return str_replace('_', '-', strtolower($name));
     }
 
@@ -393,10 +394,10 @@ class Slim_Http_Request {
      * @return  void
      */
     protected function checkForHttpMethodOverride() {
-        if ( isset($this->post[self::METHOD_OVERRIDE]) ) {
+        if (isset($this->post[self::METHOD_OVERRIDE])) {
             $this->method = $this->post[self::METHOD_OVERRIDE];
             unset($this->post[self::METHOD_OVERRIDE]);
-            if ( $this->isPut() ) {
+            if ($this->isPut()) {
                 $this->put = $this->post;
             }
         }

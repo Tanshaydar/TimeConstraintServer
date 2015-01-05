@@ -220,7 +220,7 @@ function getGame($gameId) {
 function addGame() {
     $request = Slim::getInstance()->request();
     $game = json_decode($request->getBody());
-    $sql = "INSERT INTO games (gameName) VALUES (:gameName);";
+    $sql = "INSERT INTO games (gameName, notes) VALUES (:gameName, :notes);";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
@@ -237,11 +237,12 @@ function updateGame($gameId) {
     $request = Slim::getInstance()->request();
     $body = $request->getBody();
     $game = json_decode($body);
-    $sql = "UPDATE games SET gameName=:gameName WHERE gameId=:gameId";
+    $sql = "UPDATE games SET gameName=:gameName, notes=:notes WHERE gameId=:gameId";
     try {
         $db = getConnection();
         $stmt = $db->prepare($sql);
         $stmt->bindParam("gameName", $game->gameName);
+        $stmt->bindParam("notes", $game->notes);
         $stmt->bindParam("gameId", $gameId);
         $stmt->execute();
         $db = null;

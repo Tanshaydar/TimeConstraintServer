@@ -24,7 +24,7 @@
                 <div class="btn-group btn-group-justified">
                     <a type="button" class="btn btn-default" ng-click="openTime()" id="new-provider-button"><i class="fa fa-gear"></i> Genel Ayarlar</a>
                     <a type="button" class="btn btn-default" ng-click="openGames()" id="new-providers-button"><i class="fa fa-bars"></i> Oyunlar</a>
-                    <a type="button" class="btn btn-default" ng-click="createGame()" id="domain-button"><i class="fa fa-plus-square"></i> Oyun Ekle</a>
+                    <a type="button" class="btn btn-default" ng-disabled=true ng-click="createGame()" id="domain-button"><i class="fa fa-plus-square"></i> Oyun Ekle</a>
                     <a type="button" class="btn btn-default" ng-click="openScores()" id="reports-button"><i class="fa fa-bar-chart"></i> Skor Listesi</a>
                 </div>
                 </p>
@@ -61,14 +61,8 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-5">
-                                            <h4><b>{{device.uniqueId}} {{provider.givenName}} {{provider.middleName}} {{provider.familyName}} {{provider.suffix}}</b>
+                                            <h4><b>{{device.uniqueId}}</b>
                                             </h4>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <h4>{{provider.specialization.name}}</h4>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-3">
-                                            <h4>{{provider.facility.name}}</h4>
                                         </div>
                                     </div>
                                     <div class="row">

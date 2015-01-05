@@ -37,21 +37,25 @@ angular.module('adminModule')
 
             // Save updated details of the device
             $scope.saveDevice = function (device) {
-
                 var timeZoneOffset = new Date().getTimezoneOffset();
                 var difHour = timeZoneOffset / 60;
                 var difMin = timeZoneOffset % 60;
                 var dateStart = new Date();
+                var dateEnd = new Date();
+
                 dateStart.setHours($scope.startHour - difHour);
                 dateStart.setMinutes($scope.startMinute - difMin);
 
-                var dateEnd = new Date();
                 dateEnd.setHours($scope.endHour - difHour);
                 dateEnd.setMinutes($scope.endMinute - difMin);
                 device.timeStart = dateStart;
                 device.timeEnd = dateEnd;
-                
-                
+
+                if (!moment(dateStart).isBefore(dateEnd)) {
+                    alert("Başlangıç saati bitiş saatinden önce olmalıdır!");
+                    return;
+                }
+
                 // Debug purposes
                 console.log("Saving device: ");
                 console.log(device);

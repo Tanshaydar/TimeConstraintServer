@@ -12,32 +12,8 @@ angular.module('adminModule', [])
                 $scope.devices = devices;
             });
 
-            Restangular.all('game').getList().then(function (games) {
-                $scope.games = games;
-            });
-
-            Restangular.all('score').getList().then(function (scores) {
-                $scope.scores = scores;
-            });
-
-            Restangular.all('user').getList().then(function (users) {
-                $scope.users = users;
-            });
-
-            $scope.createNewProvider = function () {
-                $location.path("/admin-new");
-            };
-
-            $scope.openReports = function () {
-                $location.path("/reports");
-            };
-
             $scope.viewDevice = function (device) {
                 $location.path("/device/" + device.uniqueId);
-            };
-
-            $scope.openDomain = function () {
-                $location.path("/admin-domain");
             };
 
             $scope.logout = function () {
@@ -52,12 +28,11 @@ angular.module('adminModule', [])
                 $location.path("/oyunlar");
             }
 
-            $scope.openGames = function () {
+            $scope.createGame = function () {
                 $location.path("/oyunekle");
             }
 
             $scope.openScores = function () {
                 $location.path("/skorlar");
             }
-
         });

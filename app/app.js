@@ -1,7 +1,7 @@
 angular.module('Authentication', []);
 angular.module('Home', []);
 var app = angular.module('app', ['ngCookies', 'ngResource', 'ngRoute', 'restangular',
-    'Authentication', 'ui.bootstrap.datetimepicker', 'Home', 'adminModule', 'zamanModule']);
+    'Authentication', 'ui.bootstrap.datetimepicker', 'Home', 'adminModule', 'zamanModule', 'gameModule', 'scoreModule']);
 
 
 app.controller('ApplicationController', function ($rootScope, $scope) {
@@ -30,16 +30,20 @@ app.config(['$routeProvider', 'RestangularProvider', function ($routeProvider, R
                     templateUrl: 'app/modules/zaman/zaman.tpl.html'
                 })
                 .when('/oyunlar', {
-                    controller: 'HomeController',
-                    templateUrl: 'app/modules/home/home.html'
+                    controller: 'GameController',
+                    templateUrl: 'app/modules/game/game.tpl.html'
+                })
+                .when('/oyunlar/:gameId', {
+                    controller: 'GameSingleController',
+                    templateUrl: 'app/modules/game/gameSingle.tpl.html'
                 })
                 .when('/oyunekle', {
                     controller: 'HomeController',
                     templateUrl: 'app/modules/home/home.html'
                 })
                 .when('/skorlar', {
-                    controller: 'HomeController',
-                    templateUrl: 'app/modules/home/home.html'
+                    controller: 'ScoreController',
+                    templateUrl: 'app/modules/scores/scores.tpl.html'
                 })
                 .when('/', {
                     controller: 'HomeController',

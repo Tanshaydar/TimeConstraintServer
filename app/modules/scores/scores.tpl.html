@@ -1,0 +1,51 @@
+<!-- ADMIN SCREEN -->
+<div class="t2-header-light">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-xs-4 clearfix">
+                <p class="text-left">
+                    <button ng-click="back2admin()" class="t2-btn-dark t2-btn-md" id="close-button-3">Geri</button>
+                </p>
+            </div>
+            <div class="col-xs-4 clearfix">
+                <h1 class="t2-header-title">Yüksek Skorlar</h1>
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+    </div>
+</div>
+
+<div class="t2-body" style="overflow: auto; overflow-x: hidden" snc-resize padding-bottom="60">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="list-group">
+                    <li class="list-group-item" ng-repeat="score in skorlar| orderBy:'gameName':false">
+                        <div class="media">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i class="fa fa-gamepad"></i> Oyun: <button ng-click="viewGame(score.gameId)">{{score.gameName}}</button>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <a class="list-group-item" ng-repeat="item in score.list| orderBy:'uniqueId':false">
+                                            <div>
+                                                <i class="fa fa-android"></i> Cihaz: <button ng-click="viewDevice(item.device)">{{item.device}}</button>
+                                            </div>
+                                            <div>
+                                                <i class="fa fa-bar-chart"></i> Skor: {{item.score}}
+                                            </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>                                  
+                            </div>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

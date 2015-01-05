@@ -1,0 +1,66 @@
+<!-- ADMIN SCREEN -->
+<div class="t2-header-light">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-xs-4 clearfix">
+                <p class="text-left">
+                    <button ng-click="back2Admin()" class="t2-btn-dark t2-btn-md" id="close-button-3">Geri</button>
+                </p>
+            </div>
+            <div class="col-xs-4 clearfix">
+                <h1 class="t2-header-title">Mevcut Oyunlar</h1>
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+    </div>
+</div>
+
+<div class="t2-body" style="overflow: auto; overflow-x: hidden" snc-resize padding-bottom="60">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <p>
+                </p>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <p>
+                    <input class="form-control" type="text" id="adSearchKeyword" ng-model="searchKeyword" placeholder="İsme göre ara" />
+                </p>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <p>
+
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="text-center">Oyun Listesi</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="list-group">
+                    <a class="list-group-item" ng-repeat="game in games| orderBy:'gameId':false | filter:searchKeyword" ng-click="viewGame(game.gameId)">
+                        <div class="media">
+                            <div class="media-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <h5><i class="fa fa-gamepad"></i> {{game.gameName}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

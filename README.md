@@ -1,0 +1,1 @@
+[Sistemle ilgili ayrıntılı bilgi viki sayfasında yer almaktadır.](https://bitbucket.org/kidfuntoy/androidzamansunucusu/wiki/Home)

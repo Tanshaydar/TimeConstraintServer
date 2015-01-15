@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 05, 2015 at 10:33 PM
+-- Generation Time: Jan 16, 2015 at 12:08 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.5.19
 
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `device` (
-  `uniqueId` varchar(25) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `uniqueId` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `deviceName` varchar(50) CHARACTER SET utf8 COLLATE utf8_turkish_ci NOT NULL,
   `override` enum('EVET','HAYIR') CHARACTER SET utf8 COLLATE utf8_turkish_ci NOT NULL,
   `timeStart` datetime DEFAULT NULL,
@@ -40,10 +40,13 @@ CREATE TABLE IF NOT EXISTS `device` (
 --
 
 INSERT INTO `device` (`uniqueId`, `deviceName`, `override`, `timeStart`, `timeEnd`, `notes`) VALUES
+('0a3c7b72b2e1ea02f26152e65', 'HAYDAR', 'HAYIR', '0000-00-00 00:00:00', '0000-00-00 00:00:00', ''),
+('0a3c7b72b2e1ea02f26152e65601fd23bba72e31', 'HAYDAR', 'HAYIR', '0000-00-00 00:00:00', '0000-00-00 00:00:00', ''),
 ('123sdgas64', 'test device 4 test güncellemesi', 'EVET', '2015-01-04 10:30:42', '2015-01-04 16:30:42', 'Bu bir test cihazıdır 4 test güncellemesi'),
 ('312fgahf342652', 'Virtual 2', 'HAYIR', NULL, NULL, 'Test amaçlı virtual device 2'),
 ('3426tafgafg345r', 'test device 1', 'HAYIR', NULL, NULL, 'test device 1'),
 ('684sdgas64', 'test device 2', 'EVET', '2014-12-12 09:37:59', '2014-12-21 17:24:46', 'Bu bir test cihazıdır'),
+('684sdgas642', 'test device 2', 'EVET', '2014-12-12 09:37:59', '2014-12-21 17:24:46', 'Bu bir test cihazıdır'),
 ('gas1234agfsg', 'Virtual 1', 'HAYIR', NULL, NULL, 'Test amaçlı virtual device 1');
 
 -- --------------------------------------------------------

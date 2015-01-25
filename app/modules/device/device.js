@@ -51,9 +51,11 @@ angular.module('adminModule')
                 device.timeStart = dateStart;
                 device.timeEnd = dateEnd;
 
-                if (!moment(dateStart).isBefore(dateEnd)) {
-                    alert("Başlangıç saati bitiş saatinden önce olmalıdır!");
-                    return;
+                if (device.override === "EVET") {
+                    if (!moment(dateStart).isBefore(dateEnd)) {
+                        alert("Başlangıç saati bitiş saatinden önce olmalıdır!");
+                        return;
+                    }
                 }
 
                 // Debug purposes

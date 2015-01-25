@@ -2,12 +2,12 @@ angular.module('adminModule')
         .controller('DeviceCtrl', function ($scope, $log, $routeParams, $location, Restangular) {
             $log.debug("Device Detail Controller *******************************");
 
-            $scope.timeStart = [];
-            $scope.timeEnd = [];
+            $scope.timeHour = [];
+            $scope.timeMinute = [];
             for (var i = 0; i < 24; i++)
-                $scope.timeStart.push(i);
+                $scope.timeHour.push(i);
             for (var i = 0; i < 60; i++)
-                $scope.timeEnd.push(i);
+                $scope.timeMinute.push(i);
             $scope.uniqueId = $routeParams.uniqueId;
 
             Restangular.one('device', $scope.uniqueId).get().then(function (device) {
